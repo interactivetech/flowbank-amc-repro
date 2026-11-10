@@ -1,0 +1,10 @@
+{
+  "paper_url": "https://arxiv.org/abs/2606.11290",
+  "repository": "https://github.com/umd-huang-lab/FlowBank",
+  "commit": "dde948d9f65cede15e6a3418dde3bf7feffdd087",
+  "sha256": {
+    "sources/flowbank.pdf": "c9974b27080101aa4cd983de00d81f89d00661f0c4eaa00ae3e8da9f0ccca70c",
+    "sources/flowbank.txt": "e645497c51ce9d111ff70ce862768b4a3cb82d996b4630e322c33285a59826af",
+    "datasets/amc_test.jsonl": "3d7d70037385d61321c11fb04f378508ce4f46510134f548b77cd10d250dbd33"
+  }
+}
