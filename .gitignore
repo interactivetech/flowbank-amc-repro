@@ -6,3 +6,5 @@ __pycache__/
 .docker-public/
 *.py[cod]
 results/
+
+.DS_Store

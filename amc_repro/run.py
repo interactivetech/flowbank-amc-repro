@@ -3,7 +3,6 @@ import asyncio
 import hashlib
 import importlib.metadata
 import json
-import subprocess
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -61,9 +60,10 @@ async def main(args):
     settings = Settings(args.temperature,args.top_p,args.inference_seed,args.max_tokens,args.thinking,
                         args.concurrency,args.requests_per_minute,args.timeout,args.retries)
     source_hashes = {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('amc_repro').glob('*.py'))}
+    provenance = json.loads(Path('sources/provenance.json').read_text())
     config = {'settings':asdict(settings),'workflows':workflows,'manifest_sha256':hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest(),
               'source_hashes':source_hashes,
-              'upstream_commit':subprocess.check_output(['git','-C','vendor/FlowBank','rev-parse','HEAD'],text=True).strip(),
+              'upstream_commit':provenance['commit'],
               'packages':{p:importlib.metadata.version(p) for p in ['openai','math-verify','sympy','latex2sympy2-extended']}}
     if (root/'config.json').exists():
         if not args.resume: raise ValueError('Results exist; use --resume or a fresh results directory')

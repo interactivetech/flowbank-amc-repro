@@ -4,7 +4,7 @@ This project reconstructs Appendix D.1 W1–W4 and compares them with a direct s
 
 ## Setup
 
-Run commands from this directory (the checked-out official repository must remain in `vendor/FlowBank`):
+Run commands from this directory. The FlowBank source files are included in `vendor/FlowBank`; their upstream commit is recorded in `sources/provenance.json`:
 
 ```bash
 uv venv .venv
