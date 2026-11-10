@@ -3,15 +3,28 @@ import asyncio
 import json
 import subprocess
 import uuid
+from pathlib import Path
 
 IMAGE = 'amc-repro-sandbox:1'
+ROOT = Path(__file__).resolve().parents[1]
 RESOLVED_IMAGE = None
 
 
 def preflight():
     global RESOLVED_IMAGE
     subprocess.run(['docker','info'], check=True, capture_output=True, timeout=15)
-    result = subprocess.run(['docker','image','inspect',IMAGE], check=True, capture_output=True, timeout=15)
+    try:
+        result = subprocess.run(['docker','image','inspect',IMAGE], check=True, capture_output=True,
+                                text=True, timeout=15)
+    except subprocess.CalledProcessError as exc:
+        if 'No such image' not in (exc.stderr or ''):
+            detail = (exc.stderr or '').strip()
+            raise RuntimeError(f'Could not inspect sandbox image {IMAGE}: {detail}') from exc
+        print(f'Sandbox image {IMAGE} is missing; building it now.', flush=True)
+        subprocess.run(['docker','build','-f','Dockerfile.sandbox','-t',IMAGE,'.'],
+                       check=True, cwd=ROOT, timeout=900)
+        result = subprocess.run(['docker','image','inspect',IMAGE], check=True, capture_output=True,
+                                text=True, timeout=15)
     info = json.loads(result.stdout)[0]
     RESOLVED_IMAGE = info['Id']
     return {'tag': IMAGE, 'image_id': info['Id'], 'repo_digests': info.get('RepoDigests', [])}

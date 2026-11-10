@@ -11,8 +11,7 @@ uv venv .venv
 uv pip install --python .venv/bin/python -r requirements.lock.txt
 source .venv/bin/activate
 cp .env.example .env  # fill in the API key; never commit .env
-# Start Docker Desktop, then build the isolated verification environment:
-docker build -f Dockerfile.sandbox -t amc-repro-sandbox:1 .
+# Start Docker Desktop. The runner builds the isolated verification image if it is missing.
 python -m amc_repro.check_endpoint
 python -m pytest -q
 ```
