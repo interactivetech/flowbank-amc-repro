@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import random
+from datetime import datetime
 from pathlib import Path
 from .grading import extract, parsed
 
@@ -15,6 +16,31 @@ def atomic_json(path, data):
         f.flush()
         os.fsync(f.fileno())
     os.replace(tmp, path)
+
+
+class ProgressLog:
+    """Write concise run progress to both the terminal and results/run.log."""
+    def __init__(self, path):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+
+    def __call__(self, message):
+        timestamp = datetime.now().astimezone().isoformat(timespec='seconds')
+        line = f'{timestamp} {message}'
+        with self.path.open('a', encoding='utf-8') as f:
+            f.write(line + '\n')
+            f.flush()
+        print(line, flush=True)
+
+
+def response_preview(text, limit=280):
+    """Compact preview showing both the opening and ending of a model response."""
+    text = ' '.join(str(text).split())
+    if len(text) <= limit:
+        return text
+    tail = min(80, limit // 3)
+    head = limit - tail - 18
+    return f'{text[:head]} … [preview omitted] … {text[-tail:]}'
 
 
 def dataset_manifest(path, size, seed):

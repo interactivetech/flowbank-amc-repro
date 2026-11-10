@@ -36,7 +36,7 @@ The manifest is saved before any LLM calls and includes row IDs, complete origin
 
 ## Outputs
 
-Each result directory contains config.json, manifest.json, metadata.json, sandbox.json, evaluations/<question>/<condition>/result.json, per-stage call checkpoints and trace.jsonl. After offline analysis it also contains:
+Each result directory contains config.json, manifest.json, metadata.json, sandbox.json, evaluations/<question>/<condition>/result.json, per-stage call checkpoints and trace.jsonl. The timestamped run.log records question/workflow progress, model-call status, and short previews from the beginning and end of each response. Full responses remain in the per-evaluation trace.jsonl files. After offline analysis it also contains:
 
 - table1_baseline and table2_portfolio, each as Markdown, CSV, and LaTeX;
 - correctness_matrix in the same formats;

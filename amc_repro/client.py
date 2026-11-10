@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass, asdict
 from dotenv import load_dotenv
 from openai import AsyncOpenAI, APIConnectionError, APITimeoutError, APIStatusError
+from .storage import response_preview
 
 
 @dataclass
@@ -20,9 +21,10 @@ class Settings:
 
 
 class Client:
-    def __init__(self, settings):
+    def __init__(self, settings, progress=None):
         load_dotenv()
         self.settings = settings
+        self.progress = progress
         self.api = AsyncOpenAI(base_url=os.environ['OPENAI_BASE_URL'], api_key=os.environ['OPENAI_API_KEY'],
                                timeout=settings.timeout, max_retries=0)
         self.model = None
@@ -61,9 +63,16 @@ class Client:
 
     async def call(self, prompt, stage, operator, trace):
         params = self.parameters()
+        common = trace.common
+        position = ''
+        if common.get('evaluation_index') and common.get('evaluation_total'):
+            position = f"[{common['evaluation_index']}/{common['evaluation_total']}] "
+        label = f"{position}{common.get('question_id', '?')} {common.get('workflow_id', '?')} {stage}"
         for attempt in range(self.settings.retries + 1):
             start = time.monotonic()
             try:
+                if self.progress:
+                    self.progress(f'{label} request {attempt + 1}/{self.settings.retries + 1}')
                 async with self.sem:
                     async with self.rate_lock:
                         await asyncio.sleep(max(0, self.next_request - time.monotonic()))
@@ -74,12 +83,20 @@ class Client:
                 trace.emit(event='llm_call', stage_id=stage, operator_type=operator, attempt=attempt,
                            parameters=params, input=prompt, output=output, raw_response=raw,
                            usage=raw.get('usage'), latency=time.monotonic()-start, status='success')
+                if self.progress:
+                    usage = raw.get('usage') or {}
+                    elapsed = time.monotonic() - start
+                    finish = response.choices[0].finish_reason or 'unknown'
+                    self.progress(f'{label} response tokens={usage.get("completion_tokens", "?")} '
+                                  f'elapsed={elapsed:.1f}s finish={finish}: {response_preview(output)}')
                 return output
             except (APIConnectionError, APITimeoutError, APIStatusError) as exc:
                 status = getattr(exc, 'status_code', None)
                 trace.emit(event='llm_call', stage_id=stage, operator_type=operator, attempt=attempt,
                            parameters=params, input=prompt, output=None, status='error', error=str(exc),
                            latency=time.monotonic()-start)
+                if self.progress:
+                    self.progress(f'{label} request error type={type(exc).__name__} status={status or "unknown"}')
                 if status in (401,403) or (status and status < 500 and status != 429) or attempt == self.settings.retries:
                     raise
                 await asyncio.sleep(min(30, 2 ** attempt))

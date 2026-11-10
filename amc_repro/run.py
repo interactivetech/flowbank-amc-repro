@@ -8,15 +8,15 @@ from dataclasses import asdict
 from pathlib import Path
 from .client import Client, Settings
 from .grading import grade
-from .storage import atomic_json, dataset_manifest, Trace
+from .storage import atomic_json, dataset_manifest, Trace, ProgressLog, response_preview
 from .workflows import Workflow
 from .sandbox import preflight
 
 
 class CachedClient:
     """Checkpoint each successful call, including those in unfinished workflows."""
-    def __init__(self, client, directory):
-        self.client, self.directory = client, directory
+    def __init__(self, client, directory, progress=None):
+        self.client, self.directory, self.progress = client, directory, progress
 
     async def call(self, prompt, stage, operator, trace):
         path = self.directory / (stage + '.json')
@@ -24,6 +24,13 @@ class CachedClient:
         if path.exists():
             saved = json.loads(path.read_text())
             if saved['prompt_sha256'] != digest: raise ValueError('Cached prompt mismatch')
+            if self.progress:
+                common = trace.common
+                position = ''
+                if common.get('evaluation_index') and common.get('evaluation_total'):
+                    position = f"[{common['evaluation_index']}/{common['evaluation_total']}] "
+                self.progress(f"{position}{common.get('question_id', '?')} {common.get('workflow_id', '?')} "
+                              f'{stage} cached: {response_preview(saved["output"])}')
             return saved['output']
         output = await self.client.call(prompt, stage, operator, trace)
         atomic_json(path, {'prompt_sha256':digest, 'output':output})
@@ -71,9 +78,14 @@ async def main(args):
     else:
         atomic_json(root/'manifest.json',manifest)
         atomic_json(root/'config.json',config)
-    client = Client(settings)
+    progress = ProgressLog(root/'run.log')
+    total_evaluations = len(manifest['questions']) * len(workflows)
+    progress(f"Run starting: {len(manifest['questions'])} question(s), {len(workflows)} workflow(s), "
+             f'{total_evaluations} evaluation(s), sample seed={args.seed}')
+    client = Client(settings, progress=progress)
     try:
         await client.discover()
+        progress(f'Model selected: {client.model}; concurrency={args.concurrency}; max_tokens={args.max_tokens}')
         metadata = client.metadata()
         if (root/'metadata.json').exists():
             old = json.loads((root/'metadata.json').read_text())
@@ -86,14 +98,19 @@ async def main(args):
                 raise ValueError('Resume sandbox image mismatch')
             atomic_json(root/'sandbox.json', sandbox)
         limit = asyncio.Semaphore(args.concurrency)
-        async def evaluate(q,w):
+        async def evaluate(q,w,index):
+            label = f'[{index}/{total_evaluations}] {q["question_id"]} {w}'
             async with limit:
                 folder = root/'evaluations'/q['question_id']/w
                 completed = folder/'result.json'
-                if completed.exists(): return
+                if completed.exists():
+                    progress(f'{label} skipped: already complete')
+                    return
+                progress(f'{label} started')
                 trace = Trace(folder/'trace.jsonl', {'question_id':q['question_id'],'workflow_id':w,'model':client.model,
+                                                    'evaluation_index':index,'evaluation_total':total_evaluations,
                                                     'inference_parameters':client.parameters()})
-                flow = Workflow(CachedClient(client,folder/'calls'),trace)
+                flow = Workflow(CachedClient(client,folder/'calls',progress),trace)
                 start = time.monotonic()
                 try:
                     output = await flow.run(w,q['row']['problem'])  # No gold enters graph.
@@ -120,13 +137,19 @@ async def main(args):
                               usage_complete=len(usages)==len(calls))
                 trace.emit(event='retrospective_evaluation',**result)
                 atomic_json(completed if status == 'completed' else folder/'failure.json',result)
-                print(q['question_id'],w,status,grading['grading_status'],flush=True)
-        await asyncio.gather(*(evaluate(q,w) for q in manifest['questions'] for w in workflows))
+                progress(f'{label} {status}: grade={grading["grading_status"]}; '
+                         f'calls={result["llm_calls"]}; elapsed={result["latency_this_attempt"]:.1f}s')
+        await asyncio.gather(*(evaluate(q,w,i) for i,(q,w) in enumerate(
+            ((q,w) for q in manifest['questions'] for w in workflows), start=1)))
         failures = list(root.glob('evaluations/*/*/failure.json'))
         missing = [1 for q in manifest['questions'] for w in workflows if not (root/'evaluations'/q['question_id']/w/'result.json').exists()]
         atomic_json(root/'run_status.json', {'status':'incomplete' if missing else 'complete','missing':len(missing)})
-        if missing: raise RuntimeError(f'{len(missing)} evaluations failed; inspect failure.json and resume')
+        if missing:
+            progress(f'Run incomplete: {missing} evaluation(s) failed; inspect failure.json and resume')
+            raise RuntimeError(f'{len(missing)} evaluations failed; inspect failure.json and resume')
+        progress(f'Run complete: {total_evaluations} evaluation(s)')
     except Exception as exc:
+        progress(f'Run blocked: {type(exc).__name__}')
         atomic_json(root/'blocked.json', {'error':str(exc),'resolved_model':client.model})
         raise
     finally:
