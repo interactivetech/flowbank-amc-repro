@@ -31,7 +31,8 @@ def statistics(results, ids):
             'best_individual_accuracy':max(accuracy[w] for w in WF),
             'complementarity_gain':len(oracle)/n-max(accuracy[w] for w in WF),
             'oracle_minus_baseline':len(oracle)/n-accuracy['baseline'],
-            'unique_wins':unique,'unsolved_count':n-len(oracle), 'pairwise_overlap':pairs,
+            'unique_wins':{w:len(solved[w]-solved['baseline']) for w in WF},
+            'workflow_exclusive_wins':unique,'unsolved_count':n-len(oracle), 'pairwise_overlap':pairs,
             'solution_loss':{w:{stage:sum(results[q,w].get('loss_stage')==stage for q in ids)
                                 for stage in ['aggregation','verification','selection_parse_failure']} for w in WF},
             'no_correct_candidate_and_final_wrong':{w:sum(not results[q,w]['correct'] and not any(c['correct'] for c in results[q,w].get('candidates',[])) for q in ids) for w in WF[:3]},
@@ -60,10 +61,15 @@ def decoding_label(params):
     return f"T={params['temperature']}, p={params['top_p']}, seed={params.get('seed')}, cap={params['max_tokens']}, thinking={thinking}"
 
 
-def analyze(root):
+def analyze(root, limit_items=None):
     root = Path(root)
     manifest = json.loads((root/'manifest.json').read_text())
     ids = [q['question_id'] for q in manifest['questions']]
+    if limit_items is not None:
+        if not 1 <= limit_items <= len(ids): raise ValueError('Invalid pilot limit')
+        ids = ids[:limit_items]
+    output_root = root/'pilot_analysis' if limit_items is not None else root
+    output_root.mkdir(parents=True, exist_ok=True)
     records = [json.loads(p.read_text()) for p in root.glob('evaluations/*/*/result.json')]
     results = {(r['question_id'],r['workflow_id']):r for r in records}
     stats = statistics(results,ids)
@@ -74,23 +80,26 @@ def analyze(root):
         return round(sum(results[q,w][key] for q in ids)/len(ids),2)
     pct = lambda x:f'{100*x:.1f}%'
     n = len(ids)
-    rows = [[metadata['model'],n,decoding_label(metadata['request_parameters']),pct(stats['accuracy']['baseline']),
-             mean('baseline','prompt_tokens'),mean('baseline','completion_tokens')]]
-    table(root/'table1_baseline',['model','sample size','decoding settings','accuracy','mean input tokens','mean output tokens'],rows)
-    portfolio = []
-    for w in WF:
-        token = (round(sum(results[q,w]['prompt_tokens']+results[q,w]['completion_tokens'] for q in ids)/n,2)
-                 if all(results[q,w]['usage_complete'] for q in ids) else 'unavailable')
-        portfolio.append([w,n,pct(stats['accuracy'][w]),stats['unique_wins'][w],token,mean(w,'llm_calls')])
-    total = round(sum(results[q,w]['prompt_tokens']+results[q,w]['completion_tokens'] for q in ids for w in WF)/n,2)
-    if not all(results[q,w]['usage_complete'] for q in ids for w in WF): total='unavailable'
-    portfolio.append(['Oracle portfolio coverage',n,pct(stats['oracle_coverage']),'N/A',total,
-                      round(sum(results[q,w]['llm_calls'] for q in ids for w in WF)/n,2)])
-    table(root/'table2_portfolio',['workflow','sample size','accuracy','unique wins','mean total tokens','mean LLM calls'],portfolio)
-    table(root/'correctness_matrix',['question ID']+CONDITIONS,
+    def total_tokens(w):
+        if not all(results[q,w]['usage_complete'] for q in ids): return 'unavailable'
+        return round(sum(results[q,w]['prompt_tokens']+results[q,w]['completion_tokens'] for q in ids)/n,2)
+    rows = [[metadata.get('model_label', metadata['model']),n,'1 rollout; '+decoding_label(metadata['request_parameters']),
+             pct(stats['accuracy']['baseline']),total_tokens('baseline')]]
+    table(output_root/'table1_baseline',['Model','N','Decode / budget','Accuracy','Mean tokens'],rows)
+    labels = {'W1':'W1: diverse ensemble','W2':'W2: analytical + code',
+              'W3':'W3: diverse + code','W4':'W4: route + solver'}
+    portfolio = [[labels[w],n,pct(stats['accuracy'][w]),stats['unique_wins'][w],total_tokens(w)] for w in WF]
+    portfolio.append(['Oracle (W1–W4)',n,pct(stats['oracle_coverage']),'—','—'])
+    table(output_root/'table2_portfolio',['Workflow','N','Final accuracy','Wins vs Qwen','Mean tokens'],portfolio)
+    stats['token_usage'] = {w:{'mean_input':mean(w,'prompt_tokens'),'mean_output':mean(w,'completion_tokens'),
+                              'mean_total':total_tokens(w), 'mean_calls':mean(w,'llm_calls'),
+                              'truncated_calls':sum(results[q,w].get('truncated_calls',0) for q in ids)} for w in CONDITIONS}
+    stats['portfolio_mean_total_tokens'] = (round(sum(total_tokens(w) for w in WF),2)
+        if all(isinstance(total_tokens(w),(int,float)) for w in WF) else 'unavailable')
+    table(output_root/'correctness_matrix',['question ID']+CONDITIONS,
           [[q]+[int(results[q,w]['correct']) for w in CONDITIONS] for q in ids])
-    atomic_json(root/'summary.json',stats)
-    with (root/'raw_traces.jsonl').open('w') as out:
+    atomic_json(output_root/'summary.json',stats)
+    with (output_root/'raw_traces.jsonl').open('w') as out:
         for q in ids:
             for w in CONDITIONS:
                 out.write((root/'evaluations'/q/w/'trace.jsonl').read_text())
@@ -100,13 +109,15 @@ def analyze(root):
                f"({round(n*stats['complementarity_gain'])} additional questions). Oracle exceeds baseline by "
                f"{100*stats['oracle_minus_baseline']:.1f} points. No workflow solved {stats['unsolved_count']} questions.\n\n"
                "Oracle uses ground truth retrospectively and is an upper bound, not a deployable selector or GNN accuracy. "
-               "Portfolio token/call costs sum all four workflows. Unique wins exclude the baseline. "
+               "Portfolio token/call costs sum all four workflows. Wins vs Qwen count items solved by that workflow and missed by the baseline. Mean tokens include input and output (including reasoning) across all calls. The output cap applies per call, so workflow total allowances exceed the single-rollout baseline. "
                "These are descriptive results on this subset; they do not establish population significance.\n")
-    (root/'RESEARCH_SUMMARY.md').write_text(summary)
+    (output_root/'RESEARCH_SUMMARY.md').write_text(summary)
     print(summary)
     return stats
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--results-dir',default='results/amc')
-    analyze(p.parse_args().results_dir)
+    p.add_argument('--limit-items',type=int)
+    args = p.parse_args()
+    analyze(args.results_dir,args.limit_items)

@@ -1,3 +1,13 @@
+# Current Slurm experiment
+
+The current configuration is specified in [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md) and operated using [RUN_AMC.md](RUN_AMC.md). It uses Qwen3.8-27B AutoRound INT4, thinking enabled, a 131,072 generated-token allowance per call, and scratch storage. W2/W3 now execute generated Python through a resource-limited subprocess (20 seconds wall, 15 seconds CPU, 2 GiB address space, bounded output, minimal environment, process-group cleanup). This backend has account-level filesystem/network access. Executor identity and limits are recorded in `sandbox.json`; the filename is retained for artifact compatibility.
+
+Wins in the current tables are relative to the single-model baseline. Workflow-exclusive wins remain a separate supporting metric. The source tree at `vendor/FlowBank` is a vendored snapshot rather than a nested Git checkout; upstream commit provenance records the documented source revision, not the containing repository's HEAD. Local source hashes bind the executed implementation.
+
+The graph/prompt and deterministic-grader descriptions below still apply. Docker, remote endpoints, thinking-off settings, old budgets, and historical run-status claims below describe the previous Mac setup and are superseded for new runs. No historical results are reused for this experiment.
+
+---
+
 # Fidelity and deviations
 
 Sources: [paper, Appendix D.1](https://arxiv.org/abs/2606.11290), [official code](https://github.com/umd-huang-lab/FlowBank), pinned at `dde948d9f65cede15e6a3418dde3bf7feffdd087`. Original clone is in `vendor/FlowBank`; PDF and extracted text are in `sources/`. Prompts are transcribed from PDF because arXiv HTML drops code blocks. PDF line wrapping and indentation are normalized; wording and the literal doubled braces in W4 are preserved. No generic round_1 graph is used.

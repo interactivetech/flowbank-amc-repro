@@ -101,7 +101,8 @@ def test_oracle():
     stats=statistics(results,['a','b','c'])
     assert stats['oracle_coverage']==2/3
     assert stats['complementarity_gain']==1/3
-    assert stats['unique_wins']['W1']==1
+    assert stats['unique_wins']['W1']==0
+    assert stats['unique_wins']['W2']==1
     assert stats['unsolved_count']==1
     del results['a','W4']
     with pytest.raises(ValueError): statistics(results,['a','b','c'])

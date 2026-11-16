@@ -4,6 +4,10 @@ from . import prompts as p
 from .sandbox import execute
 
 
+class WorkflowOutputError(ValueError):
+    """A completed model response that cannot select a candidate; do not retry."""
+
+
 class Workflow:
     def __init__(self, client, trace, executor=execute):
         self.client, self.trace, self.execute = client, trace, executor
@@ -35,7 +39,7 @@ class Workflow:
         match = re.search(r'<solution_letter>(.*?)</solution_letter>', selection, re.S)
         letter = match.group(1).strip().upper() if match else ''
         if letter not in ['A','B','C']:
-            raise ValueError('ScEnsemble parsing failure: invalid solution_letter')
+            raise WorkflowOutputError('ScEnsemble parsing failure: invalid solution_letter')
         self.selected = ord(letter)-65
         best = self.candidates[self.selected]
         self.trace.emit(event='selection', stage_id='ensemble', selected_candidate_id=letter, selected_solution=best)

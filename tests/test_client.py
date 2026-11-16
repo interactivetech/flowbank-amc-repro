@@ -18,7 +18,7 @@ def test_decoding_metadata(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_auth_failure_not_retried(monkeypatch,tmp_path):
-    import httpx2 as httpx
+    import httpx
     from openai import AuthenticationError
     monkeypatch.setenv('OPENAI_BASE_URL','http://localhost:8000/v1')
     monkeypatch.setenv('OPENAI_API_KEY','mock-key')

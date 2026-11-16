@@ -11,11 +11,11 @@ class Settings:
     temperature: float = 0
     top_p: float = 1
     seed: int | None = 42
-    max_tokens: int = 4096
-    thinking: str = 'off'
-    concurrency: int = 1
+    max_tokens: int = 131072
+    thinking: str = 'on'
+    concurrency: int = 2
     requests_per_minute: float = 30
-    timeout: float = 180
+    timeout: float = 14400
     retries: int = 3
 
 
@@ -30,6 +30,11 @@ class Client:
         self.sem = asyncio.Semaphore(settings.concurrency)
         self.rate_lock = asyncio.Lock()
         self.next_request = 0
+        self.tokenizer = None
+        self.context_length = int(os.environ.get('AMC_MAX_CONTEXT', '262144'))
+        if os.getenv('AMC_TOKENIZER_PATH'):
+            from transformers import AutoTokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(os.environ['AMC_TOKENIZER_PATH'], local_files_only=True)
 
     async def discover(self):
         self.models = (await self.api.models.list()).model_dump(mode='json')
@@ -42,6 +47,10 @@ class Client:
             self.model = ids[0]
         else:
             raise ValueError(f'Set OPENAI_MODEL to one of the discovered IDs: {ids}')
+        if self.tokenizer is not None:
+            selected = next(m for m in self.models['data'] if m['id'] == self.model)
+            if selected.get('max_model_len') != self.context_length:
+                raise ValueError('Local server context length does not match configuration')
         return self.models
 
     def parameters(self):
@@ -61,6 +70,14 @@ class Client:
 
     async def call(self, prompt, stage, operator, trace):
         params = self.parameters()
+        if self.tokenizer is not None:
+            count = len(self.tokenizer.apply_chat_template(
+                [{'role':'user','content':prompt}], tokenize=True, add_generation_prompt=True,
+                enable_thinking=self.settings.thinking != 'off'))
+            if count + self.settings.max_tokens > self.context_length:
+                trace.emit(event='context_overflow', stage_id=stage, prompt_tokens=count,
+                           output_allowance=self.settings.max_tokens, context_length=self.context_length)
+                raise ValueError(f'Context overflow: {count} prompt + {self.settings.max_tokens} output > {self.context_length}')
         for attempt in range(self.settings.retries + 1):
             start = time.monotonic()
             try:
@@ -72,7 +89,8 @@ class Client:
                 raw = response.model_dump(mode='json')
                 output = response.choices[0].message.content or ''
                 trace.emit(event='llm_call', stage_id=stage, operator_type=operator, attempt=attempt,
-                           parameters=params, input=prompt, output=output, raw_response=raw,
+                           parameters=params, input=prompt, output=output, reasoning=(raw['choices'][0]['message'].get('reasoning') or raw['choices'][0]['message'].get('reasoning_content')),
+                           finish_reason=raw['choices'][0].get('finish_reason'), raw_response=raw,
                            usage=raw.get('usage'), latency=time.monotonic()-start, status='success')
                 return output
             except (APIConnectionError, APITimeoutError, APIStatusError) as exc:

@@ -1,3 +1,11 @@
+# Current experiment status
+
+The Slurm AutoRound INT4 experiment is prepared for user review and commit. No model weights have been downloaded and no model inference has been started by this implementation. Commands and acceptance checks are in [RUN_AMC.md](RUN_AMC.md); the frozen plan is [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md).
+
+The prior Mac experiment status below is historical and is not evidence of a running process or completed result on this Slurm node.
+
+---
+
 # Experiment status
 
 ## Material Passport
