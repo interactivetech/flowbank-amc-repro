@@ -2,6 +2,8 @@
 
 Evaluate a frozen 50-item AMC subset with **Qwen3.8-27B AutoRound INT4**: one single-model rollout and the fixed Appendix D.1 workflows W1–W4. Compare final correctness and token costs, baseline-relative wins, and retrospective oracle union coverage.
 
+For a **10-hour B300 scavenger allocation**, use [B300_SCAVENGER.md](B300_SCAVENGER.md).
+
 Use [AMC_COMMANDS.md](AMC_COMMANDS.md) for the command sequence and [RUN_AMC.md](RUN_AMC.md) for review/commit, scratch-based setup, local vLLM startup within Slurm, pilot, resume, and table commands. The full specification is saved in [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md).
 
 The runtime uses one GPU and no Docker or Apptainer. Python environments, model weights, caches, logs, and results live under `/scratch1/mendeza/flowbank-amc/`. W2/W3 execute generated Python in a subprocess with resource limits; it runs with the user's account access.

@@ -1,5 +1,7 @@
 # Run the AMC comparison
 
+For allocation submission and preemption recovery, see [B300_SCAVENGER.md](B300_SCAVENGER.md).
+
 The saved specification is [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md). All commands below start from this repository. No model inference is performed by installation. **Setup downloads weights; `check` performs a real inference request.**
 
 ## 1. Review and commit before running
