@@ -21,3 +21,11 @@ export OPENAI_BASE_URL=http://127.0.0.1:8000/v1
 export OPENAI_API_KEY=local-amc
 export TOKENIZERS_PARALLELISM=false
 export PYTHONNOUSERSITE=1
+
+export PATH="$AMC_ROOT/runtime/bin:$PATH"
+if [[ -z "${CUDA_HOME:-}" && -d /opt/common/cuda/cuda-13.0.2 ]]; then
+    export CUDA_HOME=/opt/common/cuda/cuda-13.0.2
+fi
+if [[ -n "${CUDA_HOME:-}" ]]; then
+    export PATH="$CUDA_HOME/bin:$PATH"
+fi

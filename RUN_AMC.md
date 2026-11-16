@@ -37,7 +37,7 @@ tail -n 60 "$AMC_ROOT/logs/vllm.log"
 curl --fail http://127.0.0.1:8000/health
 ```
 
-Repeat the health command after model loading finishes. Startup may take minutes. A successful launcher message does not mean the model is ready; inspect its log if health fails. Startup uses the checkpoint's compressed-tensors INT4 format; kernel/model incompatibility is an error, with no precision fallback. Speculative decoding is disabled.
+Repeat the health command after model loading finishes. First startup may take several minutes while CUDA kernels compile; later startups reuse the scratch cache. The environment script adds the runtime tools to PATH and uses `/opt/common/cuda/cuda-13.0.2` when CUDA_HOME is unset and that toolkit exists. To choose another installed toolkit, export CUDA_HOME before sourcing the script. A successful launcher message does not mean the model is ready; inspect its log if health fails. Startup uses the checkpoint's compressed-tensors INT4 format; kernel/model incompatibility is an error, with no precision fallback. Speculative decoding is disabled.
 
 Inspect or stop the server:
 
