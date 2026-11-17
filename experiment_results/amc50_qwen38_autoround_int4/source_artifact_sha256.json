@@ -1,0 +1,17 @@
+{
+  "manifest.json": "55eba76c62dcb03691d9c2a67d2051486658702584191cbee7ac253d3f1be219",
+  "config.json": "b5eb309c204795e489a987d22d9e7c840199919cd160b032ff15dee82f0daefb",
+  "metadata.json": "61bc749d32988ae8036c8c725c1dbd69e28c64d90189b90be8143bd9a3b94b61",
+  "summary.json": "8607a56025f48dd516fc97c37f58a9e45443de8d82c3ca1d6ff962e56f038b8d",
+  "sandbox.json": "6e82c7cd3543ad5cc60df85deb38f79ec21bb73027b00237f6500fa47ea77619",
+  "run_status.json": "f286e5ff79e834306eb8ac375bfd4afc8a63797c2dd0c505bbe14c9f1ec87d2e",
+  "table1_baseline.md": "e467ee0b4b584da32ed5f7da2ba82e4f8b32eda0fd92c574e55c8c4e1213c103",
+  "table1_baseline.csv": "f766de7399c141847e9392714249a172563d78d55c750973e814e678e6d71f94",
+  "table1_baseline.tex": "b088d9102b6a5519115af1fbe632fdc0f6a884448a0c2b377ebc9aec7e0ff5a9",
+  "table2_portfolio.md": "53b8d5a984b4925bbc54f80c6b4a0b5e67acb8b2dc0931b52e462b4797d5997c",
+  "table2_portfolio.csv": "a52cb154dedda43912b5344591fbec596a3ebcaa1b6f30a8e9093bdae0e32cbe",
+  "table2_portfolio.tex": "0651a00e25e8ef1ea8d9cc83060cac833fb5939a6657f634b45f348316534156",
+  "correctness_matrix.md": "6a83a47ca212b6c99473ace2ad82670c4c043c99f114f3908ef7f6eb4f4e2963",
+  "correctness_matrix.csv": "0b7b1db3e240a31780a433795739e962d7a6ea057c167dcfcc70d5b52d2725c1",
+  "correctness_matrix.tex": "98dde7dac34dbc2d49c19eaed065e61aa9be790fb4d83be1f8fa8cdbef0a08d1"
+}

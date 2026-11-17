@@ -12,7 +12,7 @@ Qwen3.8-27B AutoRound INT4 is deployed on the allocated B300 on `cml38`, within 
 - Runtime environments, checkpoint, compilation caches, logs, and endpoint-check artifacts are under `/scratch1/mendeza/flowbank-amc/`. Primary logs are `setup.log` and `logs/vllm.log`; endpoint artifacts are in `results/endpoint/`.
 - Startup now waits for process-group detachment and exposes runtime tools and the installed CUDA 13.0.2 compiler. First-use compilation caches persist on scratch.
 
-**No AMC pilot or full experiment has run.** Next: `bash scripts/run_amc.sh pilot`, inspect its results, then explicitly run `full`. Commands and acceptance checks are in [RUN_AMC.md](RUN_AMC.md); the frozen plan is [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md).
+**The pilot and full experiment completed on 2026-11-16.** All 250 evaluations finished; final tables and a workflow-complementarity graph are archived in [the results folder](experiment_results/amc50_qwen38_autoround_int4/README.md). Baseline accuracy was 92%; W1–W4 were 96%, 98%, 94%, and 98%; oracle coverage was 98%. There were no infrastructure failures, 26 capped calls, and five final parsing failures. Commands and acceptance checks are in [RUN_AMC.md](RUN_AMC.md); the frozen plan is [AMC_EXPERIMENT_PLAN.md](AMC_EXPERIMENT_PLAN.md).
 
 The prior Mac experiment status below is historical and is not evidence of a running process or completed result on this Slurm node.
 

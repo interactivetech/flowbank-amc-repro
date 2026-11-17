@@ -1,0 +1,11 @@
+{
+  "matplotlib": "3.10.8",
+  "definition": "Accuracy of the union of final solved sets for every subset of size k",
+  "subset_counts": [
+    4,
+    6,
+    4,
+    1
+  ],
+  "best_single_to_all_gain_pp": 0.0
+}

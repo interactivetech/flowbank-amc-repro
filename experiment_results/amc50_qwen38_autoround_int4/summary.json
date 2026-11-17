@@ -1,0 +1,208 @@
+{
+  "sample_size": 50,
+  "accuracy": {
+    "baseline": 0.92,
+    "W1": 0.96,
+    "W2": 0.98,
+    "W3": 0.94,
+    "W4": 0.98
+  },
+  "oracle_coverage": 0.98,
+  "best_individual_accuracy": 0.98,
+  "complementarity_gain": 0.0,
+  "oracle_minus_baseline": 0.05999999999999994,
+  "unique_wins": {
+    "W1": 2,
+    "W2": 3,
+    "W3": 2,
+    "W4": 3
+  },
+  "workflow_exclusive_wins": {
+    "W1": 0,
+    "W2": 0,
+    "W3": 0,
+    "W4": 0
+  },
+  "unsolved_count": 1,
+  "pairwise_overlap": {
+    "W1_W2": {
+      "intersection_count": 48,
+      "union_count": 49,
+      "jaccard": 0.9795918367346939,
+      "both_wrong": 1,
+      "a_only": 0,
+      "b_only": 1
+    },
+    "W1_W3": {
+      "intersection_count": 46,
+      "union_count": 49,
+      "jaccard": 0.9387755102040817,
+      "both_wrong": 1,
+      "a_only": 2,
+      "b_only": 1
+    },
+    "W1_W4": {
+      "intersection_count": 48,
+      "union_count": 49,
+      "jaccard": 0.9795918367346939,
+      "both_wrong": 1,
+      "a_only": 0,
+      "b_only": 1
+    },
+    "W2_W3": {
+      "intersection_count": 47,
+      "union_count": 49,
+      "jaccard": 0.9591836734693877,
+      "both_wrong": 1,
+      "a_only": 2,
+      "b_only": 0
+    },
+    "W2_W4": {
+      "intersection_count": 49,
+      "union_count": 49,
+      "jaccard": 1.0,
+      "both_wrong": 1,
+      "a_only": 0,
+      "b_only": 0
+    },
+    "W3_W4": {
+      "intersection_count": 47,
+      "union_count": 49,
+      "jaccard": 0.9591836734693877,
+      "both_wrong": 1,
+      "a_only": 0,
+      "b_only": 2
+    }
+  },
+  "solution_loss": {
+    "W1": {
+      "aggregation": 0,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W2": {
+      "aggregation": 0,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W3": {
+      "aggregation": 0,
+      "verification": 2,
+      "selection_parse_failure": 0
+    },
+    "W4": {
+      "aggregation": 0,
+      "verification": 0,
+      "selection_parse_failure": 0
+    }
+  },
+  "no_correct_candidate_and_final_wrong": {
+    "W1": 2,
+    "W2": 1,
+    "W3": 1
+  },
+  "parsing_failures": {
+    "baseline": 3,
+    "W1": 1,
+    "W2": 1,
+    "W3": 0,
+    "W4": 0
+  },
+  "model_metadata": {
+    "base_url": "http://127.0.0.1:8000/v1/",
+    "model": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+    "request_parameters": {
+      "model": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "max_tokens": 131072,
+      "seed": 42,
+      "extra_body": {
+        "chat_template_kwargs": {
+          "enable_thinking": true
+        }
+      }
+    },
+    "client_settings": {
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "seed": 42,
+      "max_tokens": 131072,
+      "thinking": "on",
+      "concurrency": 2,
+      "requests_per_minute": 30.0,
+      "timeout": 14400.0,
+      "retries": 3
+    },
+    "models_response": {
+      "data": [
+        {
+          "id": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+          "created": 1794854551,
+          "object": "model",
+          "owned_by": "vllm",
+          "shutdown_date": null,
+          "root": "/scratch1/mendeza/flowbank-amc/cache/huggingface/hub/models--MIRALABS--Qwen3.8-27B-W4A16-AutoRound/snapshots/a6754efcde1ea362616353759f0c97507775a5a9",
+          "parent": null,
+          "max_model_len": 262144,
+          "permission": [
+            {
+              "id": "modelperm-a99383cc44ea2077",
+              "object": "model_permission",
+              "created": 1794854551,
+              "allow_create_engine": false,
+              "allow_sampling": true,
+              "allow_logprobs": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "allow_fine_tuning": false,
+              "organization": "*",
+              "group": null,
+              "is_blocking": false
+            }
+          ]
+        }
+      ],
+      "object": "list"
+    },
+    "model_label": "Qwen3.8-27B AutoRound INT4"
+  },
+  "token_usage": {
+    "baseline": {
+      "mean_input": 151.58,
+      "mean_output": 12298.98,
+      "mean_total": 12450.56,
+      "mean_calls": 1.0,
+      "truncated_calls": 3
+    },
+    "W1": {
+      "mean_input": 2524.8,
+      "mean_output": 38234.0,
+      "mean_total": 40758.8,
+      "mean_calls": 4.0,
+      "truncated_calls": 8
+    },
+    "W2": {
+      "mean_input": 3721.54,
+      "mean_output": 43979.42,
+      "mean_total": 47700.96,
+      "mean_calls": 4.98,
+      "truncated_calls": 9
+    },
+    "W3": {
+      "mean_input": 3274.12,
+      "mean_output": 35099.18,
+      "mean_total": 38373.3,
+      "mean_calls": 5.04,
+      "truncated_calls": 6
+    },
+    "W4": {
+      "mean_input": 382.6,
+      "mean_output": 6328.78,
+      "mean_total": 6711.38,
+      "mean_calls": 2.0,
+      "truncated_calls": 0
+    }
+  },
+  "portfolio_mean_total_tokens": 133544.44
+}

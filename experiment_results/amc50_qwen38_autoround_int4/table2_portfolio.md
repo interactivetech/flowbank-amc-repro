@@ -1,0 +1,7 @@
+| Workflow | N | Final accuracy | Wins vs Qwen | Mean tokens |
+|---|---|---|---|---|
+| W1: diverse ensemble | 50 | 96.0% | 2 | 40758.8 |
+| W2: analytical + code | 50 | 98.0% | 3 | 47700.96 |
+| W3: diverse + code | 50 | 94.0% | 2 | 38373.3 |
+| W4: route + solver | 50 | 98.0% | 3 | 6711.38 |
+| Oracle (W1–W4) | 50 | 98.0% | — | — |

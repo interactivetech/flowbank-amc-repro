@@ -1,0 +1,21 @@
+{
+  "backend": "python-subprocess",
+  "executable": "/scratch1/mendeza/flowbank-amc/executor/bin/python",
+  "runtime": {
+    "python": "3.12.15 | packaged by Anaconda, Inc. | (main, Oct  1 2026, 20:20:25) [GCC 14.3.0]",
+    "packages": {
+      "sympy": "1.14.0",
+      "numpy": "2.3.5",
+      "scipy": "1.16.3"
+    }
+  },
+  "python_sha256": "96831624d05d240068d0987e8938805a93928bd68d8c01249b1515daa33cf84c",
+  "wrapper_sha256": "46ba4d8823babd65813dbdfa1aa91054a4438bba9a0bf58dd33dd5d1d828420b",
+  "limits": {
+    "wall_seconds": 20,
+    "cpu_seconds": 15,
+    "memory_bytes": 2147483648,
+    "output_bytes_per_stream": 65536
+  },
+  "filesystem_isolation": false
+}

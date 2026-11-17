@@ -1,0 +1,59 @@
+{
+  "base_url": "http://127.0.0.1:8000/v1/",
+  "model": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+  "request_parameters": {
+    "model": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_tokens": 131072,
+    "seed": 42,
+    "extra_body": {
+      "chat_template_kwargs": {
+        "enable_thinking": true
+      }
+    }
+  },
+  "client_settings": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 42,
+    "max_tokens": 131072,
+    "thinking": "on",
+    "concurrency": 2,
+    "requests_per_minute": 30.0,
+    "timeout": 14400.0,
+    "retries": 3
+  },
+  "models_response": {
+    "data": [
+      {
+        "id": "qwen3.8-27b-autoround-int4-a6754efcde1e",
+        "created": 1794854551,
+        "object": "model",
+        "owned_by": "vllm",
+        "shutdown_date": null,
+        "root": "/scratch1/mendeza/flowbank-amc/cache/huggingface/hub/models--MIRALABS--Qwen3.8-27B-W4A16-AutoRound/snapshots/a6754efcde1ea362616353759f0c97507775a5a9",
+        "parent": null,
+        "max_model_len": 262144,
+        "permission": [
+          {
+            "id": "modelperm-a99383cc44ea2077",
+            "object": "model_permission",
+            "created": 1794854551,
+            "allow_create_engine": false,
+            "allow_sampling": true,
+            "allow_logprobs": true,
+            "allow_search_indices": false,
+            "allow_view": true,
+            "allow_fine_tuning": false,
+            "organization": "*",
+            "group": null,
+            "is_blocking": false
+          }
+        ]
+      }
+    ],
+    "object": "list"
+  },
+  "model_label": "Qwen3.8-27B AutoRound INT4"
+}

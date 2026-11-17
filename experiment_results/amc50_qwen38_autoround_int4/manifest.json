@@ -1,0 +1,658 @@
+{
+  "dataset_sha256": "3d7d70037385d61321c11fb04f378508ce4f46510134f548b77cd10d250dbd33",
+  "dataset_rows": 655,
+  "sample_size": 50,
+  "seed": 42,
+  "questions": [
+    {
+      "question_id": "amc-row-0654",
+      "row_index": 654,
+      "line_number": 655,
+      "original_id": null,
+      "row": {
+        "problem": "Sides $\\overline{AB}$ and $\\overline{AC}$ of equilateral triangle $ABC$ are tangent to a circle at points $B$ and $C$ respectively. What fraction of the area of $\\triangle ABC$ lies outside the circle?",
+        "solution": "[asy] real sqrt3 = 1.73205080757; draw(Circle((4, 4), 4)); draw((4-2*sqrt3,6)--(4,4)--(4+2*sqrt3,6)--(4-2*sqrt3,6)--(4,12)--(4+2*sqrt3,6)); label(\"A\", (4, 12.4)); label(\"B\", (-.3, 6.3)); label(\"C\", (8.3, 6.3)); label(\"O\", (4, 3.4)); [/asy] Let the radius of the circle be $r$, and let its center be $O$. Since $\\overline{AB}$ and $\\overline{AC}$ are tangent to circle $O$, then $\\angle OBA = \\angle OCA = 90^{\\circ}$, so $\\angle BOC = 120^{\\circ}$. Therefore, since $\\overline{OB}$ and $\\overline{OC}$ are equal to $r$, then (pick your favorite method) $\\overline{BC} = r\\sqrt{3}$. The area of the equilateral triangle is $\\frac{(r\\sqrt{3})^2 \\sqrt{3}}4 = \\frac{3r^2 \\sqrt{3}}4$, and the area of the sector we are subtracting from it is $\\frac 13 \\pi r^2 - \\frac 12 \\cdot r\\sqrt{3} \\cdot \\frac{r}2 = \\frac{\\pi r^2}3 -\\frac{r^2 \\sqrt{3}}4$. The area outside of the circle is $\\frac{3r^2 \\sqrt{3}}4-\\left(\\frac{\\pi r^2}3 -\\frac{r^2 \\sqrt{3}}4\\right) = r^2 \\sqrt{3} - \\frac{\\pi r^2}3$. Therefore, the answer is \\[\\frac{r^2 \\sqrt{3} - \\frac{\\pi r^2}3}{\\frac{3r^2 \\sqrt{3}}4} = \\boxed{\\frac{4}{3}-\\frac{4\\sqrt{3}\\pi}{27}}\\]",
+        "type": "AMC10 Final Problems",
+        "level": "Level 1"
+      },
+      "gold_answer": "\\frac{4}{3}-\\frac{4\\sqrt{3}\\pi}{27}"
+    },
+    {
+      "question_id": "amc-row-0114",
+      "row_index": 114,
+      "line_number": 115,
+      "original_id": null,
+      "row": {
+        "problem": "Suppose that $4^{x_1}=5$, $5^{x_2}=6$, $6^{x_3}=7$, ... , $127^{x_{124}}=128$.  What is $x_1x_2...x_{124}$?",
+        "solution": "We see that we can re-write $4^{x_1}=5$, $5^{x_2}=6$, $6^{x_3}=7$, ... , $127^{x_{124}}=128$ as $\\left(...\\left(\\left(\\left(4^{x_1}\\right)^{x_2}\\right)^{x_3}\\right)...\\right)^{x_{124}}=128$ by using substitution. By using the properties of exponents, we know that $4^{x_1x_2...x_{124}}=128$. $4^{x_1x_2...x_{124}}=128\\\\2^{2x_1x_2...x_{124}}=2^7\\\\2x_1x_2...x_{124}=7\\\\x_1x_2...x_{124}=\\dfrac{7}{2}$ Therefore, the answer is $\\boxed{{{{\\frac{7}{2}}}}}$",
+        "type": "AMC12 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "{{{\\frac{7}{2}}}}"
+    },
+    {
+      "question_id": "amc-row-0025",
+      "row_index": 25,
+      "line_number": 26,
+      "original_id": null,
+      "row": {
+        "problem": "Let $1$; $4$; $\\ldots$ and $9$; $16$; $\\ldots$ be two arithmetic progressions. The set $S$ is the union of the first $2004$ terms of each sequence. How many distinct numbers are in $S$?",
+        "solution": "The two sets of terms are $A=\\{ 3k+1 : 0\\leq k < 2004 \\}$ and $B=\\{ 7l+9 : 0\\leq l<2004\\}$. Now $S=A\\cup B$. We can compute $|S|=|A\\cup B|=|A|+|B|-|A\\cap B|=4008-|A\\cap B|$. We will now find $|A\\cap B|$. Consider the numbers in $B$. We want to find out how many of them lie in $A$. In other words, we need to find out the number of valid values of $l$ for which $7l+9\\in A$. The fact \"$7l+9\\in A$\" can be rewritten as \"$1\\leq 7l+9 \\leq 3\\cdot 2003 + 1$, and $7l+9\\equiv 1\\pmod 3$\". The first condition gives $0\\leq l\\leq 857$, the second one gives $l\\equiv 1\\pmod 3$. Thus the good values of $l$ are $\\{1,4,7,\\dots,856\\}$, and their count is $858/3 = 286$. Therefore $|A\\cap B|=286$, and thus $|S|=4008-|A\\cap B|=\\boxed{3722}$.",
+        "type": "AMC10 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "3722"
+    },
+    {
+      "question_id": "amc-row-0281",
+      "row_index": 281,
+      "line_number": 282,
+      "original_id": null,
+      "row": {
+        "problem": "Let $N$ be the positive integer $7777\\ldots777$, a $313$-digit number where each digit is a $7$. Let $f(r)$ be the leading digit of the $r{ }$th root of $N$. What is\\[f(2) + f(3) + f(4) + f(5)+ f(6)?\\]",
+        "solution": "We can rewrite $N$ as $\\frac{7}{9}\\cdot 9999\\ldots999 = \\frac{7}{9}\\cdot(10^{313}-1)$. When approximating values, as we will shortly do, the minus one will become negligible so we can ignore it. When we take the power of ten out of the square root, we’ll be multiplying by another power of ten, so the leading digit will not change. Thus the leading digit of $f(r)$ will be equal to the leading digit of $\\sqrt[r]{\\frac{7}{9} \\cdot 10^{313(\\mod r)}}$. Then $f(2)$ is the first digit of $\\sqrt{\\frac{7}{9}\\cdot(10)} = \\sqrt{\\frac{70}{9}} = \\sqrt{7.\\ldots} \\approx 2$ $f(3) - \\sqrt[3]{\\frac{7}{9} \\cdot 10} = \\sqrt[3]{\\frac{70}{9}} = \\sqrt[3]{7.\\ldots} \\approx 1$. $f(4) - \\sqrt[4]{\\frac{7}{9} \\cdot 10} = \\sqrt[4]{\\frac{70}{9}} = \\sqrt[4]{7.\\ldots} \\approx 1$. $f(5) - \\sqrt[5]{\\frac{7}{9} \\cdot 1000} = \\sqrt[5]{\\frac{7000}{9}} = \\sqrt[5]{777.\\ldots} \\approx 3$. $f(6) - \\sqrt[6]{\\frac{7}{9} \\cdot 10} = \\sqrt[6]{\\frac{70}{9}} = \\sqrt[6]{7.\\ldots} \\approx 1$. The final answer is therefore $2+1+1+3+1 = \\boxed{8}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "8"
+    },
+    {
+      "question_id": "amc-row-0250",
+      "row_index": 250,
+      "line_number": 251,
+      "original_id": null,
+      "row": {
+        "problem": "The sum of the base-$10$ logarithms of the divisors of $10^n$ is $792$. What is $n$?",
+        "solution": "Every factor of $10^n$ will be of the form $2^a \\times 5^b , a\\leq n , b\\leq n$. Not all of these base ten logarithms will be rational, but we can add them together in a certain way to make it rational. Recall the logarithmic property $\\log(a \\times b) = \\log(a)+\\log(b)$. For any factor $2^a \\times 5^b$, there will be another factor $2^{n-a} \\times 5^{n-b}$. Note this is not true if $10^n$ is a perfect square. When these are multiplied, they equal $2^{a+n-a} \\times 5^{b+n-b} = 10^n$. $\\log 10^n=n$ so the number of factors divided by 2 times n equals the sum of all the factors, 792. There are $n+1$ choices for the exponent of 5 in each factor, and for each of those choices, there are $n+1$ factors (each corresponding to a different exponent of 2), yielding $(n+1)^2$ total factors. $\\frac{(n+1)^2}{2}*n = 792$. We then plug in answer choices and arrive at the answer $\\boxed{11}$",
+        "type": "AMC12 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "11"
+    },
+    {
+      "question_id": "amc-row-0228",
+      "row_index": 228,
+      "line_number": 229,
+      "original_id": null,
+      "row": {
+        "problem": "Triangle $ABC$ has $AB = 13, BC = 14$, and $AC = 15$. The points $D, E$, and $F$ are the midpoints of $\\overline{AB}, \\overline{BC}$, and $\\overline{AC}$ respectively. Let $X \\neq E$ be the intersection of the circumcircles of $\\triangle BDE$ and $\\triangle CEF$. What is $XA + XB + XC$?",
+        "solution": "Consider an additional circumcircle on $\\triangle ADF$.  After drawing the diagram, it is noticed that each triangle has side values: $7$, $\\frac{15}{2}$, $\\frac{13}{2}$.  Thus they are congruent, and their respective circumcircles are. Let $M$ & $N$ be $\\triangle BDE$ & $\\triangle CEF$'s circumcircles' respective centers. Since $\\triangle BDE$ & $\\triangle CEF$ are congruent, the distance $M$ & $N$ each are from $\\overline{BC}$ are equal, so $\\overline{MN} || \\overline{BC}$. The angle between $\\overline {MN}$ & $\\overline{EX}$ is $90^{\\circ}$, and since $\\overline{MN} || \\overline{BC}$, $\\angle XEC$ is also $90^{\\circ}$. $\\triangle XEC$ is a right triangle inscribed in a circle, so $\\overline{XC}$ must be the diameter of $N$. Using the same logic & reasoning, we could deduce that $XA$ & $XB$ are also circumdiameters. Since the circumcircles are congruent, circumdiameters $XA$, $XB$, and $XC$ are congruent.  Therefore, the solution can be found by calculating one of these circumdiameters and multiplying it by a factor of $3$.  We can find the circumradius quite easily with the formula $\\sqrt{(s)(s-a)(s-b)(s-c)} = \\frac{abc}{4R}$, such that $s=\\frac{a+b+c}{2}$ and $R$ is the circumradius.  Since $s = \\frac{21}{2}$: \\[\\sqrt{(\\frac{21}{2})(4)(3)(\\frac{7}{2})} = \\frac{\\frac{15}{2}\\cdot\\frac{13}{2}\\cdot 7}{4R}\\] After a few algebraic manipulations: $\\Rightarrow R=\\frac{65}{16} \\Rightarrow XA = XB = XC = \\frac{65}{8} \\Rightarrow XA + XB + XC = \\boxed{\\frac{195}{8}}$.",
+        "type": "AMC12 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "\\frac{195}{8}"
+    },
+    {
+      "question_id": "amc-row-0142",
+      "row_index": 142,
+      "line_number": 143,
+      "original_id": null,
+      "row": {
+        "problem": "When a student multiplied the number $66$ by the repeating decimal, \\[\\underline{1}.\\underline{a} \\ \\underline{b} \\ \\underline{a} \\ \\underline{b}\\ldots=\\underline{1}.\\overline{\\underline{a} \\ \\underline{b}},\\] where $a$ and $b$ are digits, he did not notice the notation and just multiplied $66$ times $\\underline{1}.\\underline{a} \\ \\underline{b}.$ Later he found that his answer is $0.5$ less than the correct answer. What is the $2$-digit number $\\underline{a} \\ \\underline{b}?$",
+        "solution": "We are given that $66\\Bigl(\\underline{1}.\\overline{\\underline{a} \\ \\underline{b}}\\Bigr)-0.5=66\\Bigl(\\underline{1}.\\underline{a} \\ \\underline{b}\\Bigr),$ from which \\begin{align} 66\\Bigl(\\underline{1}.\\overline{\\underline{a} \\ \\underline{b}}\\Bigr)-66\\Bigl(\\underline{1}.\\underline{a} \\ \\underline{b}\\Bigr)&=0.5 \\\\ 66\\Bigl(\\underline{1}.\\overline{\\underline{a} \\ \\underline{b}} - \\underline{1}.\\underline{a} \\ \\underline{b}\\Bigr)&=0.5 \\\\ 66\\Bigl(\\underline{0}.\\underline{0} \\ \\underline{0} \\ \\overline{\\underline{a} \\ \\underline{b}}\\Bigr)&=0.5 \\\\ 66\\left(\\frac{1}{100}\\cdot\\underline{0}.\\overline{\\underline{a} \\ \\underline{b}}\\right)&=\\frac12 \\\\ \\underline{0}.\\overline{\\underline{a} \\ \\underline{b}}&=\\frac{25}{33} \\\\ \\underline{0}.\\overline{\\underline{a} \\ \\underline{b}}&=0.\\overline{75} \\\\ \\underline{a} \\ \\underline{b}&=\\boxed{75}. \\end{align}",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "75"
+    },
+    {
+      "question_id": "amc-row-0104",
+      "row_index": 104,
+      "line_number": 105,
+      "original_id": null,
+      "row": {
+        "problem": "Ten tiles numbered $1$ through $10$ are turned face down. One tile is turned up at random, and a die is rolled. What is the probability that the product of the numbers on the tile and the die will be a square?",
+        "solution": "The numbers can at most multiply to be $60$. The squares less than $60$ are $1,4,9,16,25,36,$ and $49$. The possible pairs are $(1,1),(1,4),(2,2),(4,1),(3,3),(9,1),(4,4),(8,2),(5,5),(6,6),$ and $(9,4)$. There are $11$ choices and $60$ possibilities giving a probability of $\\boxed{\\frac{11}{60}}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "\\frac{11}{60}"
+    },
+    {
+      "question_id": "amc-row-0558",
+      "row_index": 558,
+      "line_number": 559,
+      "original_id": null,
+      "row": {
+        "problem": "For a certain positive integer $n$ less than $1000$, the decimal equivalent of $\\frac{1}{n}$ is $0.\\overline{abcdef}$, a repeating decimal of period of $6$, and the decimal equivalent of $\\frac{1}{n+6}$ is $0.\\overline{wxyz}$, a repeating decimal of period $4$. In which interval does $n$ lie?",
+        "solution": "Solution by e_power_pi_times_i If $\\frac{1}{n} = 0.\\overline{abcdef}$, $n$ must be a factor of $999999$. Also, by the same procedure, $n+6$ must be a factor of $9999$. Checking through all the factors of $999999$ and $9999$ that are less than $1000$, we see that $n = 297$ is a solution, so the answer is $\\boxed{[201,400]}$. Note: $n = 27$ and $n = 3$ are both solutions, which invalidates this method. However, we need to examine all factors of $999999$ that are not factors of $99999$, $999$, or $99$, or $9$. Additionally, we need $n+6$ to be a factor of $9999$ but not $999$, $99$, or $9$. Indeed, $297$ satisfies these requirements. We can see that $n=27$ and $n=3$ are not solutions by checking it in the requirements of the problem: $\\frac{1}{3}=0.3333\\dots$, period 1, and $\\frac{1}{27}=0.037037\\dots$, period 3. Thus, $n=297$ is the only answer. For anyone who wants more information about repeating decimals, visit:",
+        "type": "AMC12 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "[201,400]"
+    },
+    {
+      "question_id": "amc-row-0089",
+      "row_index": 89,
+      "line_number": 90,
+      "original_id": null,
+      "row": {
+        "problem": "Two cubical dice each have removable numbers $1$ through $6$. The twelve numbers on the two dice are removed, put into a bag, then drawn one at a time and randomly reattached to the faces of the cubes, one number to each face. The dice are then rolled and the numbers on the two top faces are added. What is the probability that the sum is $7$?",
+        "solution": "At the moment when the numbers are in the bag, imagine that each of them has a different color. Clearly the situation is symmetric at this moment. Hence after we draw them, attach them and throw the dice, the probability of getting some pair of colors is the same for any two colors. There are ${12 \\choose 2} = 66$ ways to pick two of the colors. We now have to count the ways where the two chosen numbers will have a sum of $7$. A sum of $7$ can be obtained as $1+6$, $2+5$, or $3+4$. Each number in the bag has two different colors, hence each of these three options corresponds to four pairs of colors. Out of the $66$ pairs of colors we can get when throwing the dice, $3\\cdot 4=12$ will give us the sum $7$. Hence the probability that this will happen is $\\frac{12}{66} = \\boxed{\\frac{2}{11}}$.",
+        "type": "AMC10 Final Problems",
+        "level": "Level 1"
+      },
+      "gold_answer": "\\frac{2}{11}"
+    },
+    {
+      "question_id": "amc-row-0604",
+      "row_index": 604,
+      "line_number": 605,
+      "original_id": null,
+      "row": {
+        "problem": "The numbers $1,2,\\dots,9$ are randomly placed into the $9$ squares of a $3 \\times 3$ grid. Each square gets one number, and each of the numbers is used once. What is the probability that the sum of the numbers in each row and each column is odd?",
+        "solution": "Note that odd sums can only be formed by $(e,e,o)$ or $(o,o,o),$ so we focus on placing the evens: we need to have each even be with another even in each row/column. It can be seen that there are $9$ ways to do this. There  are then $5!$ ways to permute the odd numbers, and $4!$ ways to permute the even numbers, thus giving the answer as $\\frac{9 \\cdot 5! \\cdot 4!}{9!}=\\boxed{\\dfrac{1}{14}}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "\\dfrac{1}{14}"
+    },
+    {
+      "question_id": "amc-row-0432",
+      "row_index": 432,
+      "line_number": 433,
+      "original_id": null,
+      "row": {
+        "problem": "What is the least possible value of $(xy-1)^2+(x+y)^2$ for real numbers $x$ and $y$?",
+        "solution": "Expanding, we get that the expression is $x^2+2xy+y^2+x^2y^2-2xy+1$ or $x^2+y^2+x^2y^2+1$. By the Trivial Inequality (all squares are nonnegative) the minimum value for this is $\\boxed{1}$, which can be achieved at $x=y=0$.",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "1"
+    },
+    {
+      "question_id": "amc-row-0032",
+      "row_index": 32,
+      "line_number": 33,
+      "original_id": null,
+      "row": {
+        "problem": "The digits $1$, $2$, $3$, $4$, and $5$ are each used once to write a five-digit number $PQRST$. The three-digit number $PQR$ is divisible by $4$, the three-digit number $QRS$ is divisible by $5$, and the three-digit number $RST$ is divisible by $3$. What is $P$?",
+        "solution": "We see that since $QRS$ is divisible by $5$, $S$ must equal either $0$ or $5$, but it cannot equal $0$, so $S=5$. We notice that since $PQR$ must be even, $R$ must be either $2$ or $4$. However, when $R=2$, we see that $T \\equiv 2 \\pmod{3}$, which cannot happen because $2$ and $5$ are already used up; so $R=4$. This gives $T \\equiv 3 \\pmod{4}$, meaning $T=3$. Now, we see that $Q$ could be either $1$ or $2$, but $14$ is not divisible by $4$, but $24$ is. This means that $Q=2$ and $P=\\boxed{1}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "1"
+    },
+    {
+      "question_id": "amc-row-0030",
+      "row_index": 30,
+      "line_number": 31,
+      "original_id": null,
+      "row": {
+        "problem": "What is the sum of the digits of the square of $\\text 111111111$?",
+        "solution": "Using the standard multiplication algorithm, $111,111,111^2=12,345,678,987,654,321,$ whose digit sum is $\\boxed{81}$",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "81"
+    },
+    {
+      "question_id": "amc-row-0095",
+      "row_index": 95,
+      "line_number": 96,
+      "original_id": null,
+      "row": {
+        "problem": "Define a function on the positive integers recursively by $f(1) = 2$, $f(n) = f(n-1) + 1$ if $n$ is even, and $f(n) = f(n-2) + 2$ if $n$ is odd and greater than $1$. What is $f(2017)$?",
+        "solution": "This is a recursive function, which means the function refers back to itself to calculate subsequent terms. To solve this, we must identify the base case, $f(1)=2$. We also know that when $n$ is odd, $f(n)=f(n-2)+2$. Thus we know that $f(2017)=f(2015)+2$. Thus we know that n will always be odd in the recursion of $f(2017)$, and we add $2$ each recursive cycle, which there are $1008$ of. Thus the answer is $1008*2+2=2018$, which is answer $\\boxed{2018}$. Note that when you write out a few numbers, you find that $f(n)=n+1$ for any $n$, so $f(2017)=2018$",
+        "type": "AMC12 First Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "2018"
+    },
+    {
+      "question_id": "amc-row-0223",
+      "row_index": 223,
+      "line_number": 224,
+      "original_id": null,
+      "row": {
+        "problem": "A $2 \\times 3$ rectangle and a $3 \\times 4$ rectangle are contained within a square without overlapping at any point, and the sides of the square are parallel to the sides of the two given rectangles. What is the smallest possible area of the square?",
+        "solution": "By placing the $2 \\times 3$ rectangle adjacent to the $3 \\times 4$ rectangle with the 3 side of the $2 \\times 3$ rectangle next to the 4 side of the $3 \\times 4$ rectangle, we get a figure that can be completely enclosed in a square with a side length of 5. The area of this square is $5^2 = 25$. Since placing the two rectangles inside a $4 \\times 4$ square must result in overlap, the smallest possible area of the square is $25$. So the answer is $\\boxed{25}$.",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "25"
+    },
+    {
+      "question_id": "amc-row-0238",
+      "row_index": 238,
+      "line_number": 239,
+      "original_id": null,
+      "row": {
+        "problem": "Rhombus $ABCD$, with side length $6$, is rolled to form a cylinder of volume $6$ by taping $\\overline{AB}$ to $\\overline{DC}$. What is $\\sin(\\angle ABC)$?",
+        "solution": "[asy] pair B=(0,0), A=(6*dir(60)), C=(6,0); pair D=A+C;  draw(A--B--C--D--A); draw(A--(3,0));  label(\"$A$\",A,NW);label(\"$B$\",B,SW);label(\"$C$\",C,SE);label(\"$D$\",D,NE); label(\"$6$\",A/2,NW); label(\"$\\theta$\",(.8,.5)); label(\"$h$\",(3,2.6),E); [/asy] $V_{\\mathrm{Cylinder}} = \\pi r^2 h$ Where $C = 2\\pi r = 6$ and $h=6\\sin\\theta$ $r = \\frac{3}{\\pi}$ $V = \\pi \\left(\\frac{3}{\\pi}\\right)^2\\cdot 6\\sin\\theta$ $6 = \\frac{9}{\\pi} \\cdot 6\\sin\\theta$ $\\sin\\theta = \\frac{\\pi}{9} $ $\\boxed{\\frac{\\pi}{9}}$.",
+        "type": "AMC12 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "\\frac{\\pi}{9}"
+    },
+    {
+      "question_id": "amc-row-0517",
+      "row_index": 517,
+      "line_number": 518,
+      "original_id": null,
+      "row": {
+        "problem": "Let $P$ be the parabola with equation $y=x^2$ and let $Q = (20, 14)$. There are real numbers $r$ and $s$ such that the line through $Q$ with slope $m$ does not intersect $P$ if and only if $r$ < $m$ < $s$. What is $r + s$?",
+        "solution": "Let $y = m(x - 20) + 14$. Equating them: $x^2 = mx - 20m + 14$ $x^2 - mx + 20m - 14 = 0$ For there to be no solutions, the discriminant must be less than zero: $m^2 - 4(20m - 14) < 0$ $m^2 - 80m + 56 < 0$. So $m < 0$ for $r < m < s$ where $r$ and $s$ are the roots of $m^2 - 80m + 56 = 0$ and their sum by Vieta's formulas is $\\boxed{80}$.",
+        "type": "AMC12 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "80"
+    },
+    {
+      "question_id": "amc-row-0616",
+      "row_index": 616,
+      "line_number": 617,
+      "original_id": null,
+      "row": {
+        "problem": "How many distinct four-tuples $(a,b,c,d)$ of rational numbers are there with \\[a\\cdot\\log_{10}2+b\\cdot\\log_{10}3+c\\cdot\\log_{10}5+d\\cdot\\log_{10}7=2005?\\]",
+        "solution": "Using the laws of logarithms, the given equation becomes \\[\\log_{10}2^{a}+\\log_{10}3^{b}+\\log_{10}5^{c}+\\log_{10}7^{d}=2005\\] \\[\\Rightarrow \\log_{10}{2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d}}=2005\\] \\[\\Rightarrow 2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d} = 10^{2005}\\] As $a,b,c,d$ must all be rational, and there are no powers of $3$ or $7$ in $10^{2005}$, $b=d=0$. Then $2^{a}\\cdot 5^{c}=2^{2005}\\cdot 5^{2005} \\Rightarrow a=c=2005$. Only the four-tuple $(2005,0,2005,0)$ satisfies the equation, so the answer is $\\boxed{1} $.",
+        "type": "AMC12 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "1"
+    },
+    {
+      "question_id": "amc-row-0027",
+      "row_index": 27,
+      "line_number": 28,
+      "original_id": null,
+      "row": {
+        "problem": "Let $n$ be a $5$-digit number, and let $q$ and $r$ be the quotient and the remainder, respectively, when $n$ is divided by $100$. For how many values of $n$ is $q+r$ divisible by $11$?",
+        "solution": "Defining $q$ and $r$ in terms of floor functions and $n$ would yield: $q=\\left \\lfloor \\frac{n}{100} \\right \\rfloor$ and $r=n-100 \\left \\lfloor \\frac{n}{100} \\right \\rfloor$. Since $q+r \\equiv 0\\pmod{11}$, $\\left \\lfloor \\frac{n}{100} \\right \\rfloor + n-100 \\left \\lfloor \\frac{n}{100} \\right \\rfloor \\equiv 0\\pmod{11}$. Simplifying gets us $n-99 \\left \\lfloor \\frac{n}{100} \\right \\rfloor\\equiv 0\\pmod{11} \\rightarrow n \\equiv 0\\pmod{11}$ ($99 \\left \\lfloor \\frac{n}{100} \\right \\rfloor\\equiv 0\\pmod{11}$ is always true since floor function always yields an integer, and 99 is divisible by 11 w/o any remainder). After we come to this conclusion, it becomes easy to solve the rest of the problem ($\\left \\lfloor \\frac{n}{99999} \\right \\rfloor - \\left \\lfloor \\frac{n}{10000} \\right \\rfloor$). $\\boxed{8181}$.",
+        "type": "AMC10 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "8181"
+    },
+    {
+      "question_id": "amc-row-0574",
+      "row_index": 574,
+      "line_number": 575,
+      "original_id": null,
+      "row": {
+        "problem": "A softball team played ten games, scoring $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$, $9$, and $10$ runs.  They lost by one run in exactly five games.  In each of their other games, they scored twice as many runs as their opponent. How many total runs did their opponents score?",
+        "solution": "We know that, for the games where they scored an odd number of runs, they cannot have scored twice as many runs as their opponents, as odd numbers are not divisible by $2$.  Thus, from this, we know that the five games where they lost by one run were when they scored $1$, $3$, $5$, $7$, and $9$ runs, and the others are where they scored twice as many runs.  We can make the following chart: $\\begin{tabular}{|l|l|} \\hline Them & Opponent \\\\ \\hline 1 & 2 \\\\ 2 & 1 \\\\ 3 & 4 \\\\ 4 & 2 \\\\ 5 & 6 \\\\ 6 & 3 \\\\ 7 & 8 \\\\ 8 & 4 \\\\ 9 & 10 \\\\ 10 & 5 \\\\ \\hline \\end{tabular}$ The sum of their opponent's scores is $2 + 1 + 4 + 2 + 6 + 3 + 8 + 4 + 10 + 5 = \\boxed{45}$",
+        "type": "AMC10 First Half",
+        "level": "Level 3"
+      },
+      "gold_answer": "45"
+    },
+    {
+      "question_id": "amc-row-0203",
+      "row_index": 203,
+      "line_number": 204,
+      "original_id": null,
+      "row": {
+        "problem": "A cylindrical tank with radius $4$ feet and height $9$ feet is lying on its side. The tank is filled with water to a depth of $2$ feet. What is the volume of water, in cubic feet?",
+        "solution": "Any vertical cross-section of the tank parallel with its base looks as follows: [asy] unitsize(0.8cm); defaultpen(0.8); pair s=(0,0), bottom=(0,-4), mid=(0,-2); pair x[]=intersectionpoints( (-10,-2)--(10,-2), circle(s,4) ); fill( arc(s,x[0],x[1]) -- cycle, lightgray ); draw( circle(s,4) ); dot(s); draw( s -- bottom ); label( \"$2$\", (mid+bottom)/2, E ); draw ( s -- x[0] -- x[1] -- s ); label( \"$4$\", (s+x[0])/2, NW ); label( \"$4$\", (s+x[1])/2, NE ); label( \"$A$\", s, N ); label( \"$B$\", x[0], W ); label( \"$C$\", x[1], E ); label( \"$D$\", mid, NW ); label( \"$E$\", bottom, S ); [/asy] The volume of water can be computed as the height of the tank times the area of the shaded part. Let $\\theta$ be the size of the smaller angle $DAC$. We then have $\\cos\\theta = \\frac{AD}{AC}=\\frac 12$, hence $\\theta=60^\\circ$. The figure is symmetrical, so the angle $CAB$ has size $2\\cdot 60^\\circ = 120^\\circ$. Hence the shaded part consists of $\\frac{120^\\circ}{360^\\circ} = \\frac 13$ of the circle, minus the area of the triangle $ABC$. Using the Pythagorean theorem we can compute that $CD=\\sqrt{AC^2-AD^2}=\\sqrt{16-4}=2\\sqrt 3$. Thus $BC=4\\sqrt 3$, and the area of the triangle $ABC$ is $\\frac {2 \\cdot 4\\sqrt 3} 2 = 4\\sqrt 3$. The area of the shaded part is then $\\frac{4^2\\pi}3 - 4\\sqrt 3$, and the volume of water is $9\\cdot\\left(\\frac{4^2\\pi}3 - 4\\sqrt 3\\right) = \\boxed{48\\pi - 36 \\sqrt {3}}$. The answer is $\\text{E}$. Alternatively, we can solve for DC and see it is congruent to a 30 60 90 triangle by SSS",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "48\\pi - 36 \\sqrt {3}"
+    },
+    {
+      "question_id": "amc-row-0429",
+      "row_index": 429,
+      "line_number": 430,
+      "original_id": null,
+      "row": {
+        "problem": "Suppose that real number $x$ satisfies \\[\\sqrt{49-x^2}-\\sqrt{25-x^2}=3\\]What is the value of $\\sqrt{49-x^2}+\\sqrt{25-x^2}$?",
+        "solution": "We let $a=\\sqrt{49-x^2}+\\sqrt{25-x^2}$; in other words, we want to find $a$. We know that $a\\cdot3=\\left(\\sqrt{49-x^2}+\\sqrt{25-x^2}\\right)\\cdot\\left(\\sqrt{49-x^2}-\\sqrt{25-x^2}\\right)=\\left(\\sqrt{49-x^2}\\right)^2-\\left(\\sqrt{25-x^2}\\right)^2=\\left(49-x^2\\right)-\\left(25-x^2\\right)=24.$ Thus, $a=8.$ $\\boxed{8}$.",
+        "type": "AMC10 First Half",
+        "level": "Level 5"
+      },
+      "gold_answer": "8"
+    },
+    {
+      "question_id": "amc-row-0225",
+      "row_index": 225,
+      "line_number": 226,
+      "original_id": null,
+      "row": {
+        "problem": "What is the volume of the region in three-dimensional space defined by the inequalities $|x|+|y|+|z|\\le1$ and $|x|+|y|+|z-1|\\le1$?",
+        "solution": "Do this problem first on the first quadrant. Graph this by using test points and you will see that you will have two tetrahedrons - each of them intersects at the middle, and thus its $1/4$th of the area of the tetrahedrons (since they are the same area). The area of a tetrahedron is bh/3, which gives us $1/6$, and then divide that by $4$ to get the bounded area of $1/24$ in the shaded region. Scale this up to the other quadrants now (since they are the same due to the abs value) and you get $\\tfrac16$. $\\boxed{\\frac{1}{6}}$.",
+        "type": "AMC12 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "\\frac{1}{6}"
+    },
+    {
+      "question_id": "amc-row-0459",
+      "row_index": 459,
+      "line_number": 460,
+      "original_id": null,
+      "row": {
+        "problem": "For positive numbers $x$ and $y$ the operation $\\spadesuit (x,y)$ is defined as \\[\\spadesuit (x,y) = x-\\dfrac{1}{y}\\] What is $\\spadesuit (2,\\spadesuit (2,2))$?",
+        "solution": "$\\spadesuit (2,2) =2-\\frac{1}{2} =\\frac{3}{2}$. Then, $\\spadesuit \\left(2,\\frac{3}{2}\\right)$ is $2-\\frac{1}{\\frac{3}{2}} = 2- \\frac{2}{3} = \\frac{4}{3}$ The answer is $\\boxed{\\dfrac{4}{3}}$",
+        "type": "AMC10 First Half",
+        "level": "Level 3"
+      },
+      "gold_answer": "\\dfrac{4}{3}"
+    },
+    {
+      "question_id": "amc-row-0603",
+      "row_index": 603,
+      "line_number": 604,
+      "original_id": null,
+      "row": {
+        "problem": "For a set of four distinct lines in a plane, there are exactly $N$ distinct points that lie on two or more of the lines. What is the sum of all possible values of $N$?",
+        "solution": "It is possible to obtain $0$, $1$, $3$, $4$, $5$, and $6$ points of intersection, as demonstrated in the following figures: [asy] unitsize(2cm); real d = 2.5; draw((-1,.6)--(1,.6),Arrows); draw((-1,.2)--(1,.2),Arrows); draw((-1,-.2)--(1,-.2),Arrows); draw((-1,-.6)--(1,-.6),Arrows);  draw((-1+d,0)--(1+d,0),Arrows); draw((0+d,1)--(0+d,-1),Arrows); draw(dir(45)+(d,0)--dir(45+180)+(d,0),Arrows); draw(dir(135)+(d,0)--dir(135+180)+(d,0),Arrows); dot((0+d,0));  draw((-1+2*d,sqrt(3)/3)--(1+2*d,sqrt(3)/3),Arrows); draw((-1/4-1/2+2*d, sqrt(3)/12-sqrt(3)/2)--(-1/4+1/2+2*d,sqrt(3)/12+sqrt(3)/2),Arrows); draw((1/4+1/2+2*d, sqrt(3)/12-sqrt(3)/2)--(1/4-1/2+2*d,sqrt(3)/12+sqrt(3)/2),Arrows); draw((-1+2*d,-sqrt(3)/6)--(1+2*d,-sqrt(3)/6),Arrows); dot((0+2*d,sqrt(3)/3)); dot((-1/2+2*d,-sqrt(3)/6)); dot((1/2+2*d,-sqrt(3)/6));  draw((-1/3,1-d)--(-1/3,-1-d),Arrows);  draw((1/3,1-d)--(1/3,-1-d),Arrows); draw((-1,-1/3-d)--(1,-1/3-d),Arrows); draw((-1,1/3-d)--(1,1/3-d),Arrows); dot((1/3,1/3-d)); dot((-1/3,1/3-d)); dot((1/3,-1/3-d)); dot((-1/3,-1/3-d));  draw((-1+d,sqrt(3)/12-d)--(1+d,sqrt(3)/12-d),Arrows); draw((-1/4-1/2+d, sqrt(3)/12-sqrt(3)/2-d)--(-1/4+1/2+d,sqrt(3)/12+sqrt(3)/2-d),Arrows); draw((1/4+1/2+d, sqrt(3)/12-sqrt(3)/2-d)--(1/4-1/2+d,sqrt(3)/12+sqrt(3)/2-d),Arrows); draw((-1+d,-sqrt(3)/6-d)--(1+d,-sqrt(3)/6-d),Arrows); dot((0+d,sqrt(3)/3-d)); dot((-1/2+d,-sqrt(3)/6-d)); dot((1/2+d,-sqrt(3)/6-d)); dot((-1/4+d,sqrt(3)/12-d)); dot((1/4+d,sqrt(3)/12-d));  draw((-1/4-1/2+2*d, sqrt(3)/12-sqrt(3)/2-d)--(-1/4+1/2+2*d,sqrt(3)/12+sqrt(3)/2-d),Arrows); draw((1/4+1/2+2*d, sqrt(3)/12-sqrt(3)/2-d)--(1/4-1/2+2*d,sqrt(3)/12+sqrt(3)/2-d),Arrows); draw(dir(30)+(2*d,-d)--dir(30+180)+(2*d,-d),Arrows); draw(dir(150)+(2*d,-d)--dir(-30)+(2*d,-d),Arrows); dot((0+2*d,0-d)); dot((0+2*d,sqrt(3)/3-d)); dot((-1/2+2*d,-sqrt(3)/6-d)); dot((1/2+2*d,-sqrt(3)/6-d)); dot((-1/4+2*d,sqrt(3)/12-d)); dot((1/4+2*d,sqrt(3)/12-d)); [/asy] It is clear that the maximum number of possible intersections is ${4 \\choose 2} = 6$, since each pair of lines can intersect at most once.  We now prove that it is impossible to obtain two intersections. We proceed by contradiction.  Assume a configuration of four lines exists such that there exist only two intersection points.  Let these intersection points be $A$ and $B$.  Consider two cases: Case 1:  No line passes through both $A$ and $B$ Then, since an intersection point is obtained by an intersection between at least two lines, two lines pass through each of $A$ and $B$.  Then, since there can be no additional intersections, the 2 lines that pass through $A$ cant intersect the 2 lines that pass through $B$, and so 2 lines passing through $A$ must be parallel to 2 lines passing through $B$. Then the two lines passing through $B$ are parallel to each other by transitivity of parallelism, so they coincide, contradiction. Case 2:  There is a line passing through $A$ and $B$ Then there must be a line $l_a$ passing through $A$, and a line $l_b$ passing through $B$.  These lines must be parallel.  The fourth line $l$ must pass through either $A$ or $B$.  Without loss of generality, suppose $l$ passes through $A$.  Then since $l$ and $l_a$ cannot coincide, they cannot be parallel.  Then $l$ and $l_b$ cannot be parallel either, so they intersect, contradiction. All possibilities have been exhausted, and thus we can conclude that two intersections is impossible.  Our answer is given by the sum $0+1+3+4+5+6=\\boxed{19}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "19"
+    },
+    {
+      "question_id": "amc-row-0284",
+      "row_index": 284,
+      "line_number": 285,
+      "original_id": null,
+      "row": {
+        "problem": "For how many positive integers $n$ does $1+2+...+n$ evenly divide from $6n$?",
+        "solution": "If $1+2+...+n$ evenly divides $6n$, then $\\frac{6n}{1+2+...+n}$ is an integer. Since $1+2+...+n = \\frac{n(n+1)}{2}$ we may substitute the RHS in the above fraction. So the problem asks us for how many positive integers $n$ is $\\frac{6n}{\\frac{n(n+1)}{2}}=\\frac{12}{n+1}$ an integer, or equivalently when $k(n+1) = 12$ for a positive integer $k$. $\\frac{12}{n+1}$ is an integer when $n+1$ is a factor of $12$. The factors of $12$ are $1, 2, 3, 4, 6,$ and $12$, so the possible values of $n$ are $0, 1, 2, 3, 5,$ and $11$. But since $0$ isn't a positive integer, only $1, 2, 3, 5,$ and $11$ are the possible values of $n$. Therefore the number of possible values of $n$ is $\\boxed{5}$.",
+        "type": "AMC10 Final Problems",
+        "level": "Level 1"
+      },
+      "gold_answer": "5"
+    },
+    {
+      "question_id": "amc-row-0006",
+      "row_index": 6,
+      "line_number": 7,
+      "original_id": null,
+      "row": {
+        "problem": "Laura added two three-digit positive integers. All six digits in these numbers are different. Laura's sum is a three-digit number $S$. What is the smallest possible value for the sum of the digits of $S$?",
+        "solution": "Let the two three-digit numbers she added be $a$ and $b$ with $a+b=S$ and $a<b$. The hundreds digits of these numbers must be at least $1$ and $2$, so $a\\ge 100$ and $b\\ge 200$. Say $a=100+p$ and $b=200+q$; then we just need $p+q=100$ with $p$ and $q$ having different digits which aren't $1$ or $2$.There are many solutions, but $p=3$ and $q=97$ give $103+297=400$ which proves that $\\boxed{4}$ is attainable.",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "4"
+    },
+    {
+      "question_id": "amc-row-0163",
+      "row_index": 163,
+      "line_number": 164,
+      "original_id": null,
+      "row": {
+        "problem": "What is the difference between the sum of the first $2003$ even counting numbers and the sum of the first $2003$ odd counting numbers?",
+        "solution": "The first $2003$ even counting numbers are $2,4,6,...,4006$. The first $2003$ odd counting numbers are $1,3,5,...,4005$. Thus, the problem is asking for the value of $(2+4+6+...+4006)-(1+3+5+...+4005)$. $(2+4+6+...+4006)-(1+3+5+...+4005) = (2-1)+(4-3)+(6-5)+...+(4006-4005)$ $= 1+1+1+...+1 = \\boxed{2003}$",
+        "type": "AMC10 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "2003"
+    },
+    {
+      "question_id": "amc-row-0348",
+      "row_index": 348,
+      "line_number": 349,
+      "original_id": null,
+      "row": {
+        "problem": "An ATM password at Fred's Bank is composed of four digits from $0$ to $9$, with repeated digits allowable. If no password may begin with the sequence $9,1,1,$ then how many passwords are possible?",
+        "solution": "For the first three digits, there are $10^3-1=999$ combinations since $911$ is not allowed. For the final digit, any of the $10$ numbers are allowed. $999 \\cdot 10 = 9990 \\rightarrow \\boxed{9990}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "9990"
+    },
+    {
+      "question_id": "amc-row-0159",
+      "row_index": 159,
+      "line_number": 160,
+      "original_id": null,
+      "row": {
+        "problem": "The functions $\\sin(x)$ and $\\cos(x)$ are periodic with least period $2\\pi$. What is the least period of the function $\\cos(\\sin(x))$?",
+        "solution": "Start by noting that $\\cos(-x)=\\cos(x)$. Then realize that under this function, the negative sine values yield the same as their positive value, so take the absolute value of the sine function to get the new period. This has period $\\pi$, so the answer is $\\boxed{\\pi}$.",
+        "type": "AMC12 First Half",
+        "level": "Level 5"
+      },
+      "gold_answer": "\\pi"
+    },
+    {
+      "question_id": "amc-row-0220",
+      "row_index": 220,
+      "line_number": 221,
+      "original_id": null,
+      "row": {
+        "problem": "A triangle with side lengths in the ratio $3 : 4 : 5$ is inscribed in a circle with radius 3. What is the area of the triangle?",
+        "solution": "The hypotenuse of the triangle is a diameter of the circumcircle, so it has length $2 \\cdot 3 = 6$. The triangle is similar to a 3-4-5 triangle with the ratio of their side lengths equal to $\\frac{6}{5}$. The area of a 3-4-5 triangle is $\\frac{3\\cdot 4}{2} = 6$. The square of the ratio of their side lengths is equal to the ratio of their areas. Call the area of the triangle $A$. Therefore, $\\left(\\frac{6}{5}\\right)^2 = \\frac{A}{6} \\Longrightarrow \\frac{36}{25} = \\frac{A}{6} \\Longrightarrow A = \\frac{36\\cdot6}{25} = 8.64\\ $ $\\boxed{8.64}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "8.64"
+    },
+    {
+      "question_id": "amc-row-0344",
+      "row_index": 344,
+      "line_number": 345,
+      "original_id": null,
+      "row": {
+        "problem": "In a room, $2/5$ of the people are wearing gloves, and $3/4$ of the people are wearing hats. What is the minimum number of people in the room wearing both a hat and a glove?",
+        "solution": "Let $x$ be the number of people wearing both a hat and a glove. Since the number of people wearing a hat or a glove must be whole numbers, the number of people in the room must be a multiple of (4,5), but we do lcm of 4,5 = 20. Since we are trying to find the minimum $x$, we must use the smallest possible value for the number of people in the room. Similarly, we can assume that there are no people present who are wearing neither of the two items since this would unnecessarily increase the number of people in the room. Thus, we can say that there are $20$ people in the room, all of which are wearing at least a hat or a glove. It follows that there are $\\frac{2}{5}\\cdot 20 = 8$ people wearing gloves and $\\frac{3}{4}\\cdot 20 = 15$ people wearing hats. Then by applying the Principle of Inclusion Exclusion (PIE), the total number of people in the room wearing either a hat or a glove or both is  $8+15-x = 23-x$. Since we know that this equals $20$, it follows that $23-x = 20$, which implies that $x=3$. Thus, $\\boxed{3}$ is the correct answer.",
+        "type": "AMC8 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "3"
+    },
+    {
+      "question_id": "amc-row-0094",
+      "row_index": 94,
+      "line_number": 95,
+      "original_id": null,
+      "row": {
+        "problem": "Three fair six-sided dice are rolled. What is the probability that the values shown on two of the dice sum to the value shown on the remaining die?",
+        "solution": "First, we note that there are $1, 2, 3, 4,$ and $5$ ways to get sums of $2, 3, 4, 5, 6$ respectively--this is not too hard to see. With any specific sum, there is exactly one way to attain it on the other die. This means that the probability that two specific dice have the same sum as the other is \\[\\dfrac16 \\left( \\dfrac{1+2+3+4+5}{36}\\right) = \\dfrac{5}{72}.\\] Since there are $\\dbinom31$ ways to choose which die will be the one with the sum of the other two, our answer is $3 \\cdot \\dfrac{5}{72} = \\boxed{\\dfrac5{24}}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "\\dfrac5{24}"
+    },
+    {
+      "question_id": "amc-row-0389",
+      "row_index": 389,
+      "line_number": 390,
+      "original_id": null,
+      "row": {
+        "problem": "Tori's mathematics test had 75 problems: 10 arithmetic, 30 algebra, and 35 geometry problems. Although she answered 70% of the arithmetic, 40% of the algebra, and 60% of the geometry problems correctly, she did not pass the test because she got less than 60% of the problems right. How many more problems would she have needed to answer correctly to earn a 60% passing grade?",
+        "solution": "First, calculate how many of each type of problem she got right: Arithmetic:  $70\\% \\cdot 10 = 0.70 \\cdot 10 = 7$ Algebra:  $40\\% \\cdot 30 = 0.40 \\cdot 30 = 12$ Geometry:  $60\\% \\cdot 35 = 0.60 \\cdot 35 =  21$ Altogether, Tori answered $7 + 12 + 21 = 40$ questions correct. To get a $60\\%$ on her test overall, she needed to get $60\\% \\cdot 75 = 0.60 \\cdot 75 = 45$ questions right. Therefore, she needed to answer $45 - 40 = 5$ more questions to pass, so the correct answer is $\\boxed{5}$",
+        "type": "AMC8 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "5"
+    },
+    {
+      "question_id": "amc-row-0099",
+      "row_index": 99,
+      "line_number": 100,
+      "original_id": null,
+      "row": {
+        "problem": "Joey and his five brothers are ages $3$, $5$, $7$, $9$, $11$, and $13$.  One afternoon two of his brothers whose ages sum to $16$ went to the movies, two brothers younger than $10$ went to play baseball, and Joey and the $5$-year-old stayed home.  How old is Joey?",
+        "solution": "Because the $5$-year-old stayed home, we know that the $11$-year-old did not go to the movies, as the $5$-year-old did not and $11+5=16$.  Also, the $11$-year-old could not have gone to play baseball, as he is older than $10$.  Thus, the $11$-year-old must have stayed home, so Joey is $\\boxed{11}$",
+        "type": "AMC10 First Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "11"
+    },
+    {
+      "question_id": "amc-row-0367",
+      "row_index": 367,
+      "line_number": 368,
+      "original_id": null,
+      "row": {
+        "problem": "Two eight-sided dice each have faces numbered $1$ through $8$. When the dice are rolled, each face has an equal probability of appearing on the top. What is the probability that the product of the two top numbers is greater than their sum?",
+        "solution": "We have $1\\times n = n < 1 + n$, hence if at least one of the numbers is $1$, the sum is larger. There $15$ such possibilities. We have $2\\times 2 = 2+2$. For $n>2$ we already have $2\\times n = n + n > 2 + n$, hence all other cases are good. Out of the $8\\times 8$ possible cases, we find that in $15+1=16$ the sum is greater than or equal to the product, hence in $64-16=48$ cases the sum is smaller, satisfying the condition. Therefore the answer is $\\frac{48}{64}=\\boxed{\\frac{3}{4}}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "\\frac{3}{4}"
+    },
+    {
+      "question_id": "amc-row-0352",
+      "row_index": 352,
+      "line_number": 353,
+      "original_id": null,
+      "row": {
+        "problem": "In an All-Area track meet, $216$ sprinters enter a $100-$meter dash competition. The track has $6$ lanes, so only $6$ sprinters can compete at a time. At the end of each race, the five non-winners are eliminated, and the winner will compete again in a later race. How many races are needed to determine the champion sprinter?",
+        "solution": "From any $n-$th race, only $\\frac{1}{6}$ will continue on. Since we wish to find the total number of races, a column representing the races over time is ideal. Starting with the first race: \\[\\frac{216}{6}=36\\] \\[\\frac{36}{6}=6\\] \\[\\frac{6}{6}=1\\] Adding all of the numbers in the second column yields $\\boxed{43}$",
+        "type": "AMC8 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "43"
+    },
+    {
+      "question_id": "amc-row-0618",
+      "row_index": 618,
+      "line_number": 619,
+      "original_id": null,
+      "row": {
+        "problem": "For positive integers $m$ and $n$ such that $m+10<n+1$, both the mean and the median of the set $\\{m, m+4, m+10, n+1, n+2, 2n\\}$ are equal to $n$. What is $m+n$?",
+        "solution": "The mean and median are \\[\\frac{3m+4n+17}{6}=\\frac{m+n+11}{2}=n,\\]so $3m+17=2n$ and $m+11=n$. Solving this gives $\\left(m,n\\right)=\\left(5,16\\right)$ for $m+n=\\boxed{21}$. (trumpeter)",
+        "type": "AMC12 First Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "21"
+    },
+    {
+      "question_id": "amc-row-0270",
+      "row_index": 270,
+      "line_number": 271,
+      "original_id": null,
+      "row": {
+        "problem": "A positive integer divisor of $12!$ is chosen at random. The probability that the divisor chosen is a perfect square can be expressed as $\\frac{m}{n}$, where $m$ and $n$ are relatively prime positive integers. What is $m+n$?",
+        "solution": "The prime factorization of $12!$ is $2^{10} \\cdot 3^5 \\cdot 5^2 \\cdot 7 \\cdot 11$. This yields a total of $11 \\cdot 6 \\cdot 3 \\cdot 2 \\cdot 2$ divisors of $12!.$ In order to produce a perfect square divisor, there must be an even exponent for each number in the prime factorization. Note that the divisor can't have any factors of $7$ and $11$ in the prime factorization because there is only one of each in $12!.$ Thus, there are $6 \\cdot 3 \\cdot 2$ perfect squares. (For $2$, you can have $0$, $2$, $4$, $6$, $8$, or $10$ $2$s, etc.) The probability that the divisor chosen is a perfect square is \\[\\frac{6\\cdot 3\\cdot 2}{11\\cdot 6\\cdot 3\\cdot 2\\cdot 2}=\\frac{1}{22} \\implies \\frac{m}{n}=\\frac{1}{22} \\implies m\\ +\\ n = 1\\ +\\ 22 = \\boxed{23}\\]",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "23"
+    },
+    {
+      "question_id": "amc-row-0044",
+      "row_index": 44,
+      "line_number": 45,
+      "original_id": null,
+      "row": {
+        "problem": "A number of students from Fibonacci Middle School are taking part in a community service project. The ratio of $8^\\text{th}$-graders to $6^\\text{th}$-graders is $5:3$, and the the ratio of $8^\\text{th}$-graders to $7^\\text{th}$-graders is $8:5$. What is the smallest number of students that could be participating in the project?",
+        "solution": "We multiply the first ratio by 8 on both sides, and the second ratio by 5 to get the same number for 8th graders, in order that we can put the two ratios together: $5:3 = 5(8):3(8) = 40:24$ $8:5 = 8(5):5(5) = 40:25$ Therefore, the ratio of 8th graders to 7th graders to 6th graders is $40:25:24$. Since the ratio is in lowest terms, the smallest number of students participating in the project is $40+25+24 = \\boxed{89}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 2"
+      },
+      "gold_answer": "89"
+    },
+    {
+      "question_id": "amc-row-0470",
+      "row_index": 470,
+      "line_number": 471,
+      "original_id": null,
+      "row": {
+        "problem": "Given that $x$ and $y$ are distinct nonzero real numbers such that $x+\\tfrac{2}{x} = y + \\tfrac{2}{y}$, what is $xy$?",
+        "solution": "$x+\\tfrac{2}{x}= y+\\tfrac{2}{y}$ Since $x\\not=y$, we may assume that $x=\\frac{2}{y}$ and/or, equivalently, $y=\\frac{2}{x}$. Cross multiply in either equation, giving us $xy=2$. $\\boxed{2}$",
+        "type": "AMC12 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "2"
+    },
+    {
+      "question_id": "amc-row-0549",
+      "row_index": 549,
+      "line_number": 550,
+      "original_id": null,
+      "row": {
+        "problem": "How many ordered triples $(x,y,z)$ of positive integers satisfy $\\text{lcm}(x,y) = 72, \\text{lcm}(x,z) = 600 \\text{ and lcm}(y,z)=900$?",
+        "solution": "We prime factorize $72,600,$ and $900$. The prime factorizations are $2^3\\times 3^2$, $2^3\\times 3\\times 5^2$ and $2^2\\times 3^2\\times 5^2$, respectively. Let $x=2^a\\times 3^b\\times 5^c$, $y=2^d\\times 3^e\\times 5^f$ and $z=2^g\\times 3^h\\times 5^i$. We know that \\[\\max(a,d)=3\\] \\[\\max(b,e)=2\\] \\[\\max(a,g)=3\\] \\[\\max(b,h)=1\\] \\[\\max(c,i)=2\\] \\[\\max(d,g)=2\\] \\[\\max(e,h)=2\\] and $c=f=0$ since $\\text{lcm}(x,y)$ isn't a multiple of 5. Since $\\max(d,g)=2$ we know that $a=3$. We also know that since $\\max(b,h)=1$ that $e=2$. So now some equations have become useless to us...let's take them out. \\[\\max(b,h)=1\\] \\[\\max(d,g)=2\\] are the only two important ones left. We do casework on each now. If $\\max(b,h)=1$ then $(b,h)=(1,0),(0,1)$ or $(1,1)$. Similarly if $\\max(d,g)=2$ then $(d,g)=(2,0),(2,1),(2,2),(1,2),(0,2)$. Thus our answer is $5\\times 3=\\boxed{15}.$",
+        "type": "AMC10 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "15"
+    },
+    {
+      "question_id": "amc-row-0127",
+      "row_index": 127,
+      "line_number": 128,
+      "original_id": null,
+      "row": {
+        "problem": "Let $x=-2016$. What is the value of $\\bigg|$ $||x|-x|-|x|$ $\\bigg|$ $-x$?",
+        "solution": "By: dragonfly First of all, lets plug in all of the $x$'s into the equation. $\\bigg|$ $||-2016|-(-2016)|-|-2016|$ $\\bigg|$ $-(-2016)$ Then we simplify to get $\\bigg|$ $|2016+2016|-2016$ $\\bigg|$ $+2016$ which simplifies into $\\bigg|$ $2016$ $\\bigg|$ $+2016$ and finally we get $\\boxed{4032}$",
+        "type": "AMC12 First Half",
+        "level": "Level 4"
+      },
+      "gold_answer": "4032"
+    },
+    {
+      "question_id": "amc-row-0387",
+      "row_index": 387,
+      "line_number": 388,
+      "original_id": null,
+      "row": {
+        "problem": "Ali, Bonnie, Carlo, and Dianna are going to drive together to a nearby theme park. The car they are using has $4$ seats: $1$ Driver seat, $1$ front passenger seat, and $2$ back passenger seat. Bonnie and Carlo are the only ones who know how to drive the car. How many possible seating arrangements are there?",
+        "solution": "There are only $2$ people who can go in the driver's seat--Bonnie and Carlo. Any of the $3$ remaining people can go in the front passenger seat. There are $2$ people who can go in the first back passenger seat, and the remaining person must go in the last seat. Thus, there are $2\\cdot3\\cdot2$ or $12$ ways. The answer is then $\\boxed{12}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "12"
+    },
+    {
+      "question_id": "amc-row-0080",
+      "row_index": 80,
+      "line_number": 81,
+      "original_id": null,
+      "row": {
+        "problem": "Halfway through a 100-shot archery tournament, Chelsea leads by 50 points. For each shot a bullseye scores 10 points, with other possible scores being 8, 4, 2, and 0 points. Chelsea always scores at least 4 points on each shot. If Chelsea's next $n$ shots are bullseyes she will be guaranteed victory. What is the minimum value for $n$?",
+        "solution": "Let $k$ be the number of points Chelsea currently has. In order to guarantee victory, we must consider the possibility that the opponent scores the maximum amount of points by getting only bullseyes. \\begin{align}k+ 10n + 4(50-n) &> (k-50) + 50\\cdot{10}\\\\  6n &> 250\\end{align} The lowest integer value that satisfies the inequality is $\\boxed{42}$.",
+        "type": "AMC12 First Half",
+        "level": "Level 5"
+      },
+      "gold_answer": "42"
+    },
+    {
+      "question_id": "amc-row-0565",
+      "row_index": 565,
+      "line_number": 566,
+      "original_id": null,
+      "row": {
+        "problem": "Let $S$ be a set of $6$ integers taken from $\\{1,2,\\dots,12\\}$ with the property that if $a$ and $b$ are elements of $S$ with $a<b$, then $b$ is not a multiple of $a$. What is the least possible value of an element in $S$?",
+        "solution": "We start with $2$ because $1$ is not an answer choice. We would have to include every odd number except $1$ to fill out the set, but then $3$ and $9$ would violate the rule, so that won't work. Experimentation with $3$ shows it's likewise impossible. You can include $7,11,$ and either $5$ or $10$ (which are always safe). But after adding either $4$ or $8$ we have no more valid numbers. Finally, starting with $4,$ we find that the sequence $4,5,6,7,9,11$ works, giving us $\\boxed{4}.$",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "4"
+    },
+    {
+      "question_id": "amc-row-0300",
+      "row_index": 300,
+      "line_number": 301,
+      "original_id": null,
+      "row": {
+        "problem": "In the BIG N, a middle school football conference, each team plays every other team exactly once. If a total of 21 conference games were played during the 2012 season, how many teams were members of the BIG N conference?",
+        "solution": "This problem is very similar to a handshake problem. We use the formula $\\frac{n(n-1)}{2}$ to usually find the number of games played (or handshakes). Now we have to use the formula in reverse. So we have the equation  $\\frac{n(n-1)}{2} = 21$. Solving, we find that the number of teams in the BIG N conference is  $\\boxed{7}$.",
+        "type": "AMC8 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "7"
+    },
+    {
+      "question_id": "amc-row-0643",
+      "row_index": 643,
+      "line_number": 644,
+      "original_id": null,
+      "row": {
+        "problem": "Right triangles $T_1$ and $T_2$, have areas of 1 and 2, respectively. A side of $T_1$ is congruent to a side of $T_2$, and a different side of $T_1$ is congruent to a different side of $T_2$. What is the square of the product of the lengths of the other (third) sides of $T_1$ and $T_2$?",
+        "solution": "First of all, let the two sides which are congruent be $x$ and $y$, where $y > x$. The only way that the conditions of the problem can be satisfied is if $x$ is the shorter leg of $T_{2}$ and the longer leg of $T_{1}$, and $y$ is the longer leg of $T_{2}$ and the hypotenuse of $T_{1}$. Notice that this means the value we are looking for is the square of $\\sqrt{x^{2}+y^{2}} \\cdot \\sqrt{y^{2}-x^{2}} = \\sqrt{y^{4}-x^{4}}$, which is just $y^{4}-x^{4}$. The area conditions give us two equations: $\\frac{xy}{2} = 2$ and $\\frac{x\\sqrt{y^{2}-x^{2}}}{2} = 1$. This means that $y = \\frac{4}{x}$ and that $\\frac{4}{x^{2}} = y^{2} - x^{2}$. Taking the second equation, we get $x^{2}y^{2} - x^{4} = 4$, so since $xy = 4$, $x^{4} = 12$. Since $y = \\frac{4}{x}$, we get $y^{4} = \\frac{256}{12} = \\frac{64}{3}$. The value we are looking for is just $y^{4}-x^{4} = \\frac{64-36}{3} = \\frac{28}{3}$ so the answer is $\\boxed{\\frac{28}{3}}$.",
+        "type": "AMC10 Second Half",
+        "level": "Level 1"
+      },
+      "gold_answer": "\\frac{28}{3}"
+    },
+    {
+      "question_id": "amc-row-0633",
+      "row_index": 633,
+      "line_number": 634,
+      "original_id": null,
+      "row": {
+        "problem": "Let $G$ be the set of polynomials of the form \\[P(z)=z^n+c_{n-1}z^{n-1}+\\cdots+c_2z^2+c_1z+50,\\] where $c_1,c_2,\\cdots, c_{n-1}$ are integers and $P(z)$ has distinct roots of the form $a+ib$ with $a$ and $b$ integers. How many polynomials are in $G$?",
+        "solution": "If we factor into irreducible polynomials (in $\\mathbb{Q}[x]$), each factor $f_i$ has exponent $1$ in the factorization and degree at most $2$ (since the $a+bi$ with $b\\ne0$ come in conjugate pairs with product $a^2+b^2$). Clearly we want the product of constant terms of these polynomials to equal $50$; for $d\\mid 50$, let $f(d)$ be the number of permitted $f_i$ with constant term $d$. It's easy to compute $f(1)=2$, $f(2)=3$, $f(5)=5$, $f(10)=5$, $f(25)=6$, $f(50)=7$, and obviously $f(d) = 1$ for negative $d\\mid 50$. Note that by the distinctness condition, the only constant terms $d$ that can be repeated are those with $d^2\\mid 50$ and $f(d)>1$, i.e. $+1$ and $+5$. Also, the $+1$s don't affect the product, so we can simply count the number of polynomials with no constant terms of $+1$ and multiply by $2^{f(1)} = 4$ at the end. We do casework on the (unique) even constant term $d\\in\\{\\pm2,\\pm10,\\pm50\\}$ in our product. For convenience, let $F(d)$ be the number of ways to get a product of $50/d$ without using $\\pm 1$ (so only using $\\pm5,\\pm25$) and recall $f(-1) = 1$; then our final answer will be $2^{f(1)}\\sum_{d\\in\\{2,10,50\\}}(f(-d)+f(d))(F(-d)+F(d))$. It's easy to compute $F(-50)=0$, $F(50)=1$, $F(-10)=f(5)=5$, $F(10)=f(-5)=1$, $F(-2)=f(-25)+f(-5)f(5)=6$, $F(2)=f(25)+\\binom{f(5)}{2}=16$, so we get \\[4 [ (1+3)(6+16) + (1+5)(1+5) + (1+7)(0+1) ] = 4[132] = \\boxed{528}\\]",
+        "type": "AMC12 Final Problems",
+        "level": "Level 2"
+      },
+      "gold_answer": "528"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+k,number_of_subsets,N,min_accuracy_pct,mean_accuracy_pct,best_accuracy_pct
+1,4,50,94.0,96.5,98.0
+2,6,50,98.0,98.0,98.0
+3,4,50,98.0,98.0,98.0
+4,1,50,98.0,98.0,98.0
