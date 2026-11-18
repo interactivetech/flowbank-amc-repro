@@ -40,6 +40,7 @@ def parser():
     p.add_argument('--results-dir',default='results/amc')
     p.add_argument('--resume',action='store_true')
     p.add_argument('--limit-items',type=int, help='Schedule only the first K items of the full frozen manifest')
+    p.add_argument('--model-lock',type=Path,help='Explicit pinned model lock for a separately versioned DeepMath rerun')
     p.add_argument('--local-runtime',action='store_true', help='Bind the pinned local server identity and tokenizer')
     p.add_argument('--temperature',type=float,default=0)
     p.add_argument('--top-p',type=float,default=1)
@@ -69,14 +70,16 @@ async def _main(args):
     if args.dataset_format == 'deepmath-screened':
         from .deepmath import load_frozen, require_scratch, preflight as reference_preflight
         require_scratch(root)
-        if size != 26: raise ValueError('DeepMath requires all 26 frozen questions')
         manifest = load_frozen(args.dataset)
+        if args.sample_size is None: size = manifest['sample_size']
+        if size != manifest['sample_size']: raise ValueError('DeepMath requires all frozen questions')
         from .deepmath import FILENAME
-        source_bytes = (Path(args.dataset).parent/FILENAME).read_bytes()
-        if (root/FILENAME).exists() and (root/FILENAME).read_bytes() != source_bytes:
+        source_path = Path(args.dataset).parent/FILENAME
+        source_bytes = source_path.read_bytes() if manifest.get('dataset_format') != 'deepmath-screened-v2' else None
+        if source_bytes is not None and (root/FILENAME).exists() and (root/FILENAME).read_bytes() != source_bytes:
             raise ValueError('Results source CSV mismatch')
         root.mkdir(parents=True, exist_ok=True)
-        (root/FILENAME).write_bytes(source_bytes)
+        if source_bytes is not None: (root/FILENAME).write_bytes(source_bytes)
         if workflows != ['baseline','W1','W2','W3','W4']:
             raise ValueError('DeepMath requires baseline plus W1–W4')
         if (args.temperature,args.top_p,args.inference_seed,args.max_tokens,args.thinking,args.concurrency) != (0,1,42,131072,'on',2):
@@ -86,8 +89,9 @@ async def _main(args):
         if not args.local_runtime: raise ValueError('DeepMath requires the pinned local runtime')
         from .local_runtime import identity
         archived = Path('experiment_results/amc50_qwen38_autoround_int4/config.json')
-        expected = json.loads(archived.read_text())['local_runtime']['model']
-        if identity()['model'] != expected: raise ValueError('DeepMath model differs from archived AMC checkpoint')
+        expected = (json.loads(args.model_lock.read_text()) if args.model_lock else
+                    json.loads(archived.read_text())['local_runtime']['model'])
+        if identity()['model'] != expected: raise ValueError('DeepMath model differs from pinned checkpoint')
         atomic_json(root/'reference_preflight.json',reference_preflight(manifest))
     else:
         manifest = dataset_manifest(args.dataset,size,args.seed)
@@ -100,6 +104,8 @@ async def _main(args):
               'local_runtime':runtime,
               'runtime_packages':dict(sorted((d.metadata['Name'],d.version) for d in importlib.metadata.distributions() if d.metadata['Name'])),
               'packages':{p:importlib.metadata.version(p) for p in ['openai','math-verify','sympy','latex2sympy2-extended']}}
+    if args.model_lock:
+        config['explicit_model_lock_sha256'] = hashlib.sha256(args.model_lock.read_bytes()).hexdigest()
     if (root/'config.json').exists():
         if not args.resume: raise ValueError('Results exist; use --resume or a fresh results directory')
         if json.loads((root/'manifest.json').read_text()) != manifest: raise ValueError('Saved manifest mismatch')
@@ -112,7 +118,9 @@ async def _main(args):
     try:
         await client.discover()
         metadata = client.metadata()
-        if runtime: metadata['model_label'] = 'Qwen3.8-27B AutoRound INT4'
+        if runtime:
+            from .local_runtime import model_label
+            metadata['model_label'] = model_label(runtime)
         if (root/'metadata.json').exists():
             old = json.loads((root/'metadata.json').read_text())
             if old['model'] != metadata['model'] or old['request_parameters'] != metadata['request_parameters']:

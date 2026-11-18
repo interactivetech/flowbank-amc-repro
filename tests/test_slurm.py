@@ -117,15 +117,18 @@ def test_prepare_pins_revision_and_checks_quantization(monkeypatch,tmp_path):
         local.prepare()
 
 
-def test_serve_arguments_without_launching(monkeypatch,tmp_path):
+@pytest.mark.parametrize('model_profile',['autoround','redhat'])
+def test_serve_arguments_without_launching(monkeypatch,tmp_path,model_profile):
     from amc_repro import local_runtime as local
     from unittest.mock import MagicMock
     import socket
     monkeypatch.setenv('AMC_ROOT',str(tmp_path))
     monkeypatch.setenv('SLURM_JOB_ID','fixture')
-    lock={'repository':local.MODEL,'revision':'a'*40,'served_model':'fixture-id',
+    monkeypatch.setenv('AMC_MODEL_PROFILE',model_profile)
+    deployment=local.deployment_root(); deployment.mkdir(parents=True,exist_ok=True)
+    lock={'repository':local.REDHAT_MODEL if model_profile=='redhat' else local.MODEL,'revision':'a'*40,'served_model':'fixture-id',
           'snapshot':str(tmp_path/'model'),'quantization':{'quant_method':'compressed-tensors'}}
-    (tmp_path/'model.lock.json').write_text(json.dumps(lock))
+    (deployment/'model.lock.json').write_text(json.dumps(lock))
     sock=MagicMock(); sock.__enter__.return_value.connect_ex.return_value=1
     monkeypatch.setattr(socket,'socket',lambda *a:sock)
     monkeypatch.setattr(local.os,'setsid',lambda:None)
@@ -141,5 +144,46 @@ def test_serve_arguments_without_launching(monkeypatch,tmp_path):
     assert '--speculative-config' not in captured
     assert local.configure_client()['model']==lock
     lock['revision']='b'*40
-    (tmp_path/'model.lock.json').write_text(json.dumps(lock))
+    (deployment/'model.lock.json').write_text(json.dumps(lock))
     with pytest.raises(ValueError,match='lock mismatch'): local.identity()
+
+
+def test_redhat_prepare_separate_lock(monkeypatch,tmp_path):
+    from amc_repro import local_runtime as local
+    import huggingface_hub
+    monkeypatch.setenv('AMC_ROOT',str(tmp_path))
+    monkeypatch.setenv('AMC_MODEL_PROFILE','redhat')
+    original=tmp_path/'model.lock.json'
+    original.write_text('original autoround lock')
+    snapshot=tmp_path/'snapshot';snapshot.mkdir()
+    (snapshot/'config.json').write_text(json.dumps({'quantization_config':{'quant_method':'compressed-tensors',
+        'config_groups':{'group_0':{'weights':{'num_bits':4}}}}}))
+    calls=[]
+    def download(repository,revision,**kwargs):
+        calls.append((repository,revision))
+        return str(snapshot)
+    monkeypatch.setattr(huggingface_hub,'snapshot_download',download)
+    monkeypatch.setattr(huggingface_hub,'HfApi',lambda:pytest.fail('RedHat revision must be pinned explicitly'))
+    local.prepare()
+    local.prepare()
+    lock=json.loads((local.deployment_root()/'model.lock.json').read_text())
+    assert lock['repository']==local.REDHAT_MODEL and lock['revision']==local.REDHAT_REVISION
+    assert calls==[(local.REDHAT_MODEL,local.REDHAT_REVISION)]*2
+    assert original.read_text()=='original autoround lock'
+    assert local.model_label({'model':lock})=='Qwen3.8-27B RedHatAI INT4'
+
+
+def test_prepare_rejects_missing_indexed_weight(monkeypatch,tmp_path):
+    from amc_repro import local_runtime as local
+    import huggingface_hub
+    monkeypatch.setenv('AMC_ROOT',str(tmp_path))
+    monkeypatch.setenv('AMC_MODEL_PROFILE','redhat')
+    snapshot=tmp_path/'snapshot';snapshot.mkdir()
+    (snapshot/'config.json').write_text(json.dumps({'quantization_config':{'quant_method':'compressed-tensors',
+        'config_groups':{'group_0':{'weights':{'num_bits':4}}}}}))
+    (snapshot/'model.safetensors.index.json').write_text(json.dumps({'weight_map':{'mtp.weight':'model_mtp.safetensors'}}))
+    monkeypatch.setattr(huggingface_hub,'HfApi',lambda:None)
+    monkeypatch.setattr(huggingface_hub,'snapshot_download',lambda *a,**kw:str(snapshot))
+    with pytest.raises(ValueError,match='missing indexed weights: model_mtp.safetensors'):
+        local.prepare()
+    assert not (local.deployment_root()/'model.lock.json').exists()

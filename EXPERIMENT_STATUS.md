@@ -1,5 +1,7 @@
 # Current experiment status
 
+> **Screening audit notice (2026-11-18):** Historical screening rates have a confirmed Boolean grading defect and do not validate difficulty strata. Counts and figures are retained as recorded. See [the postmortem](DEEPMATH_SCREENING_POSTMORTEM.md) for evidence, limits, and the replacement screening process.
+
 ## Local deployment verified — 2026-11-16
 
 Qwen3.8-27B AutoRound INT4 is deployed on the allocated B300 on `cml38`, within Slurm job `8437053`. This records verification at deployment time; use the health command to check whether that allocation and process are still running.
@@ -52,3 +54,15 @@ The initial pilot exposed an extraction-format bug: a boxed yes/no label followe
 Active results: `/scratch1/mendeza/flowbank-amc/results/deepmath26`. Pipeline state: `/scratch1/mendeza/flowbank-amc/deepmath/pipeline_status.json`. Log: `/scratch1/mendeza/flowbank-amc/logs/deepmath-pipeline.log`. The launcher is `/scratch1/mendeza/flowbank-amc/deepmath/run_experiment.py`; its PID is recorded in `pipeline.pid` beside it. It survives terminal detachment but requires recovery if the Slurm allocation ends.
 
 A 26-item extrapolation from archived AMC evaluation latencies at concurrency two is approximately 4.0 hours. This is a comparison, not a reliable DeepMath prediction; hard questions may exceed ten hours in total. The completed pilot initially projected 1.17 hours for the remainder, which underestimated the later long generations. Observed total elapsed time was approximately 4 hours 5 minutes.
+
+## RedHatAI DeepMath rerun — pilot running (2026-11-18)
+
+The user authorized a new full DeepMath experiment using the checkpoint from the screening deployment, `RedHatAI/Qwen3.8-27B-INT4`. Revision `e45c27e8f463817db788d141a73a3c235a0a7c0c` is pinned; separate model locks, logs and results preserve the completed AutoRound run. All 64 local tests pass, including alternate-model lock rejection, profile isolation, indexed-weight completeness, and pilot-to-full resume.
+
+The idle AutoRound server was stopped and the RedHat server launched in Slurm allocation 8437053. This allocation has one B300; the rerun keeps the prior experiment's settings and disables speculative decoding, rather than reproducing the screening deployment's four-GPU DFlash configuration. See [rerun specification and commands](REDHAT_DEEPMATH_RERUN.md). No new accuracy is reported while the rerun is incomplete.
+
+The RedHat weights loaded successfully after fetching the additional MTP weight file referenced by the model index (required by the loader even with speculative decoding disabled). Preparation now validates every indexed weight file before serving. The RedHat endpoint passed a real reasoning-enabled check accepting the 131,072-token cap. Pipeline PID 1460775 started the fresh pilot at 3:11 PM Eastern with two active requests, then will run diagnostics and continue to the full run if the pilot is clean. The new and old manifest hashes and decoding/limit settings match. vLLM resolved the RedHat checkpoint to FP8 KV cache, recorded in the deployment log and `observed_runtime.json`. State and logs are under `/scratch1/mendeza/flowbank-amc/deployments/redhat/`.
+
+## Replacement screening implementation — 2026-11-18
+
+The RedHat workflow batch was preserved with 173 successful calls and 51 completed evaluations, then stopped. The existing allocation and model server were retained. The replacement screen is governed by [the frozen specification](SCREENING_SPEC.md) and [operator commands](RUN_SCREENING.md). Launch requires committed, pushed, verified code and offline tests. Screening outputs remain provisional until manual audit; no workflow rerun is launched automatically.

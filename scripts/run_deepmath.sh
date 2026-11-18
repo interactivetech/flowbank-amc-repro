@@ -5,6 +5,11 @@ source scripts/amc_env.sh
 PYTHON="$AMC_ROOT/runtime/bin/python"
 FROZEN="$AMC_ROOT/deepmath/frozen"
 RESULTS="$AMC_ROOT/results/deepmath26"
+MODEL_ARGS=()
+if [[ "${AMC_MODEL_PROFILE:-autoround}" == redhat ]]; then
+  RESULTS="$AMC_ROOT/results/deepmath26_redhat_int4"
+  MODEL_ARGS+=(--model-lock "$AMC_ROOT/deployments/redhat/model.lock.json")
+fi
 case "${1:-}" in
   freeze)
     # Network access only when the exact revision is absent; no inference.
@@ -36,7 +41,7 @@ PY
       --workflows baseline,W1,W2,W3,W4 --results-dir "$RESULTS" \
       --temperature 0 --top-p 1 --inference-seed 42 --max-tokens 131072 \
       --thinking on --concurrency 2 --requests-per-minute 30 --timeout 14400 \
-      "${EXTRA[@]}"
+      "${MODEL_ARGS[@]}" "${EXTRA[@]}"
     ;;
   analyze-pilot|status)
     "$PYTHON" -m amc_repro.deepmath_analysis pilot --results-dir "$RESULTS"

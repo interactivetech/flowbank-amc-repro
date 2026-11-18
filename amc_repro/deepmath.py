@@ -96,6 +96,10 @@ def manifest(path):
 
 
 def preflight(frozen):
+    if frozen.get('dataset_format') == 'deepmath-screened-v2':
+        from .screening import preflight_reference
+        for q in frozen['questions']: preflight_reference(q['reference'])
+        return {'status':'passed', 'items':len(frozen['questions'])}
     checks = []
     for q in frozen['questions']:
         ref = q['reference']
@@ -138,6 +142,20 @@ def preflight(frozen):
 def load_frozen(path):
     path = require_scratch(path)
     saved = json.loads(path.read_text())
+    if saved.get('dataset_format') == 'deepmath-screened-v2':
+        from .screening import digest, accepted, results, preflight_reference
+        evidence_root = require_scratch(saved.get('screening_run',path.parent))
+        lock = json.loads((evidence_root/'lock.json').read_text())
+        audit = json.loads((evidence_root/'audit.json').read_text())
+        if digest(saved) != lock['manifest_sha256'] or digest(audit) != lock['audit_sha256']:
+            raise ValueError('Locked screening manifest or audit mismatch')
+        if saved['sample_size'] != len(saved['questions']):
+            raise ValueError('Manifest size mismatch')
+        for q in saved['questions']:
+            preflight_reference(q['reference'])
+            if not accepted(q, results(evidence_root,q), audit.get(q['question_id'],{})):
+                raise ValueError('Audit evidence mismatch')
+        return saved
     source = path.parent/FILENAME
     expected = manifest(source)
     if saved != expected: raise ValueError('Frozen manifest mismatch')

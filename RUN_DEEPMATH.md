@@ -1,5 +1,7 @@
 # DeepMath experiment commands
 
+> **Screening audit notice (2026-11-18):** Historical screening rates have a confirmed Boolean grading defect and do not validate difficulty strata. Counts and figures are retained as recorded. See [the postmortem](DEEPMATH_SCREENING_POSTMORTEM.md) for evidence, limits, and the replacement screening process.
+
 Specification: [approved experiment plan](DEEPMATH_EXPERIMENT_PLAN.md). This implementation never starts inference automatically. The offline freeze has been validated on the pinned source. See `EXPERIMENT_STATUS.md` for the current launch state; avoid starting a duplicate pipeline.
 
 Use the same B300 allocation, pinned server, runtime, executor, and scratch cache as [RUN_AMC.md](RUN_AMC.md) and [B300_SCAVENGER.md](B300_SCAVENGER.md). The model revision must match the archived AMC checkpoint (`a6754efcde1ea362616353759f0c97507775a5a9`). Preserve `AMC_ROOT`; do not rerun model preparation against a new revision. The server command remains `bash scripts/start_vllm.sh` in the GPU allocation. Keep two requests concurrent on one B300.

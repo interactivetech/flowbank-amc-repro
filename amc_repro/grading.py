@@ -72,8 +72,19 @@ def normalize_math(answer, imaginary=False):
     return value
 
 
+def boolean_label(value):
+    """Normalize categorical references, including Python/SymPy Boolean values."""
+    value = str(value).strip().strip('$').strip()
+    match = re.fullmatch(r'(?:\\(?:text|mathrm|operatorname)\{\s*)?(yes|no|true|false)\s*\}?[.]?', value, re.I)
+    if not match:
+        raise ValueError('Unsupported Boolean reference')
+    return match.group(1).lower() in ('yes', 'true')
+
+
 def grade_typed(response, reference):
     kind = reference['kind']
+    if kind not in ('boolean','choice','math','complex'):
+        raise ValueError('Unsupported reference kind: ' + str(kind))
     answer = extract(response)
     value = (answer or '').strip().strip('$').strip()
     def result(ok, valid):
@@ -81,10 +92,10 @@ def grade_typed(response, reference):
                 'grading_status':'correct' if ok else ('math_error' if valid else 'parse_failure')}
     if kind == 'boolean':
         # The extracted final answer can include a justification after the label.
-        match = re.match(r'^(?:\\text\{\s*)?(yes|no|true|false)(?=$|[\s,.;!:}])', value, re.I)
+        match = re.match(r'^(?:\\(?:text|mathrm|operatorname)\{\s*)?(yes|no|true|false)(?=$|[\s,.;!:}])', value, re.I)
         if not match: return result(False, False)
         prediction = match.group(1).lower() in ('yes','true')
-        return result(prediction == (reference['gold'].lower() in ('yes','true')), True)
+        return result(prediction == boolean_label(reference['gold']), True)
     if kind == 'choice':
         match = re.fullmatch(r'(?:\\text\{)?(?:option\s+)?\(?([A-E])\)?(?:\})?[.)]?', value, re.I)
         if match: return result(match.group(1).upper() == reference['gold'], True)

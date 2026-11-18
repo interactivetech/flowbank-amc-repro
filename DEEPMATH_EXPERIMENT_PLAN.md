@@ -1,5 +1,7 @@
 # DeepMath: workflow complementarity as baseline solve rate decreases
 
+> **Screening audit notice (2026-11-18):** Historical screening rates have a confirmed Boolean grading defect and do not validate difficulty strata. Counts and figures are retained as recorded. See [the postmortem](DEEPMATH_SCREENING_POSTMORTEM.md) for evidence, limits, and the replacement screening process.
+
 ## 1. Frozen experiment
 
 Evaluate **all 26 screened questions** from `mendeza-umd/deepmath-103k-qwen-3-8-27b-results`, pinned to revision `e723e4604d862e25fa2c57313a7c37494a674c03`.

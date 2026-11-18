@@ -110,7 +110,8 @@ def test_cohort_membership_outcome_independent(frozen_fixture):
 
 
 @pytest.mark.asyncio
-async def test_deepmath_pilot_resume_no_label_leakage(frozen_fixture,monkeypatch):
+@pytest.mark.parametrize('checkpoint',['autoround','redhat'])
+async def test_deepmath_pilot_resume_no_label_leakage(frozen_fixture,monkeypatch,checkpoint):
     root,frozen=frozen_fixture
     results=root/'results'; calls=[]
     original_questions={q['row']['question'] for q in frozen['questions']}
@@ -139,6 +140,16 @@ async def test_deepmath_pilot_resume_no_label_leakage(frozen_fixture,monkeypatch
     monkeypatch.setattr(local_runtime,'configure_client',lambda:archived)
     monkeypatch.setattr(local_runtime,'identity',lambda:archived)
     base=['--dataset-format','deepmath-screened','--dataset',str(root/'manifest.json'),'--results-dir',str(results),'--local-runtime']
+    if checkpoint=='redhat':
+        archived['model']['repository']=local_runtime.REDHAT_MODEL
+        archived['model']['revision']=local_runtime.REDHAT_REVISION
+        pinned=root/'redhat.lock.json'
+        atomic_json(pinned,archived['model'])
+        # Alternate checkpoint is rejected without its explicit lock.
+        with pytest.raises(ValueError,match='differs from pinned checkpoint'):
+            await run.main(run.parser().parse_args(base+['--limit-items','5']))
+        assert not calls
+        base += ['--model-lock',str(pinned)]
     await run.main(run.parser().parse_args(base+['--limit-items','5']))
     saved=(results/'manifest.json').read_bytes()
     assert len(calls)==85

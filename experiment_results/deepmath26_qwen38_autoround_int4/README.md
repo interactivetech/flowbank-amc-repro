@@ -1,5 +1,7 @@
 # DeepMath screened subset: Qwen3.8-27B AutoRound INT4
 
+> **Screening audit notice (2026-11-18):** Historical screening rates have a confirmed Boolean grading defect and do not validate difficulty strata. Counts and figures are retained as recorded. See [the postmortem](../../DEEPMATH_SCREENING_POSTMORTEM.md) for evidence, limits, and the replacement screening process.
+
 All **130 evaluations** on the **26 frozen screened questions** completed on November 17, 2026, at **4:48 PM Eastern**. Elapsed time, including the pilot and a documented grading-parser correction, was approximately **4 hours 5 minutes** on one NVIDIA B300 with two concurrent requests.
 
 | Condition | Solved | Final accuracy | Wins over fresh baseline | Mean input + output tokens |
