@@ -34,3 +34,21 @@ The real smoke test runs in results/smoke with concurrency 2, temperature 0, top
 scripts/finish_experiment.py monitors the smoke test. Only after it completes successfully will the script analyze the smoke results, run the 50-question experiment in results/amc (same decoding settings, concurrency 2, timeout 600s), and generate tables and a research summary. Consult results/pipeline_status.json and results/pipeline.log for current status. A failed smoke test prevents the full run.
 
 Final accuracy and complementarity conclusions are pending. README.md contains setup, resume, and offline-analysis commands; REPRODUCTION_NOTES.md documents the model change and all fidelity choices.
+
+## DeepMath extension — complete (2026-11-17)
+
+All 130 evaluations and final analysis completed on November 17 at 4:48 PM Eastern, approximately 4 hours 5 minutes after launch. Baseline solved 18/26 (69.2%); W1 19/26 (73.1%); W2 and W3 each 23/26 (88.5%); W4 22/26 (84.6%); the four-workflow oracle solved 25/26 (96.2%). Oracle gain beyond the best individual is 2 questions (7.7 percentage points). There were no infrastructure failures, 6 final-answer parsing failures, and 7 truncated model calls. These diagnostics are retained without post-run relabeling.
+
+The published aggregate report is [archived in the repository](experiment_results/deepmath26_qwen38_autoround_int4/README.md); the original report remains at `/scratch1/mendeza/flowbank-amc/results/deepmath26/comparison/RESULTS_REPORT.md`. Both figures exist in PNG/PDF/SVG alongside aggregate CSVs; the two AMC-style tables are in the parent results directory. The nested historical cohorts do not show monotonically increasing complementarity: gains are 7.7, 14.3, 9.1, 0, and 0 percentage points as screening thresholds decrease from 100% to 0%. All five questions with no observed screening successes were solved by W2, W3, and W4 individually; their fresh baseline solved four. Historical screening labels are not directly comparable with the fresh baseline.
+
+The following paragraphs record launch and recovery history.
+
+The approved specification is saved as `DEEPMATH_EXPERIMENT_PLAN.md`; commands are in `RUN_DEEPMATH.md`. The pinned 26-row CSV and typed references are frozen on scratch at `/scratch1/mendeza/flowbank-amc/deepmath/frozen`. All 214 reference preflight cases and 60 local tests pass. Supplied labels and historical screening rates remain unchanged.
+
+The user explicitly authorized launch on November 17. The staged pipeline ran inside B300 allocation 8437053 on cml38. The 25-evaluation pilot passed all diagnostic gates, so the pipeline continued to the remaining 105 evaluations and generated final analysis after all 130 completed.
+
+The initial pilot exposed an extraction-format bug: a boxed yes/no label followed by a justification was rejected. The Boolean parser now accepts a categorical label at the start of the extracted final answer. Regression tests cover this format. Original pilot artifacts are retained intact under `/scratch1/mendeza/flowbank-amc/results/deepmath26_initial_boolean_parser`; `deepmath26/grading_correction.json` records the correction. Generation prompts, settings, gold labels, and model were unchanged. Fourteen successful call checkpoints and their traces were reused, with results recomputed under the corrected grader and a fresh source/configuration record.
+
+Active results: `/scratch1/mendeza/flowbank-amc/results/deepmath26`. Pipeline state: `/scratch1/mendeza/flowbank-amc/deepmath/pipeline_status.json`. Log: `/scratch1/mendeza/flowbank-amc/logs/deepmath-pipeline.log`. The launcher is `/scratch1/mendeza/flowbank-amc/deepmath/run_experiment.py`; its PID is recorded in `pipeline.pid` beside it. It survives terminal detachment but requires recovery if the Slurm allocation ends.
+
+A 26-item extrapolation from archived AMC evaluation latencies at concurrency two is approximately 4.0 hours. This is a comparison, not a reliable DeepMath prediction; hard questions may exceed ten hours in total. The completed pilot initially projected 1.17 hours for the remainder, which underestimated the later long generations. Observed total elapsed time was approximately 4 hours 5 minutes.

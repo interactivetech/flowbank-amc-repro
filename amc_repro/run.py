@@ -7,7 +7,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 from .client import Client, Settings
-from .grading import grade
+from .grading import grade, grade_typed
 from .storage import atomic_json, dataset_manifest, Trace
 from .workflows import Workflow, WorkflowOutputError
 from .sandbox import preflight
@@ -33,7 +33,8 @@ class CachedClient:
 def parser():
     p = argparse.ArgumentParser()
     p.add_argument('--dataset', default='datasets/amc_test.jsonl')
-    p.add_argument('--sample-size',type=int,default=50)
+    p.add_argument('--dataset-format', choices=['amc','deepmath-screened'], default='amc')
+    p.add_argument('--sample-size',type=int)
     p.add_argument('--seed',type=int,default=42)
     p.add_argument('--workflows',default='baseline,W1,W2,W3,W4')
     p.add_argument('--results-dir',default='results/amc')
@@ -58,13 +59,38 @@ async def _main(args):
     if len(set(workflows)) != len(workflows) or set(workflows)-set(['baseline','W1','W2','W3','W4']):
         raise ValueError('Invalid or duplicate workflows')
     if args.concurrency < 1 or args.requests_per_minute <= 0: raise ValueError('Invalid concurrency/rate')
-    if args.limit_items is not None and not 1 <= args.limit_items <= args.sample_size:
+    size = args.sample_size if args.sample_size is not None else (26 if args.dataset_format == 'deepmath-screened' else 50)
+    if args.limit_items is not None and not 1 <= args.limit_items <= size:
         raise ValueError('limit-items must be between 1 and sample-size')
     runtime = None
     if args.local_runtime:
         from .local_runtime import configure_client
         runtime = configure_client()
-    manifest = dataset_manifest(args.dataset,args.sample_size,args.seed)
+    if args.dataset_format == 'deepmath-screened':
+        from .deepmath import load_frozen, require_scratch, preflight as reference_preflight
+        require_scratch(root)
+        if size != 26: raise ValueError('DeepMath requires all 26 frozen questions')
+        manifest = load_frozen(args.dataset)
+        from .deepmath import FILENAME
+        source_bytes = (Path(args.dataset).parent/FILENAME).read_bytes()
+        if (root/FILENAME).exists() and (root/FILENAME).read_bytes() != source_bytes:
+            raise ValueError('Results source CSV mismatch')
+        root.mkdir(parents=True, exist_ok=True)
+        (root/FILENAME).write_bytes(source_bytes)
+        if workflows != ['baseline','W1','W2','W3','W4']:
+            raise ValueError('DeepMath requires baseline plus W1–W4')
+        if (args.temperature,args.top_p,args.inference_seed,args.max_tokens,args.thinking,args.concurrency) != (0,1,42,131072,'on',2):
+            raise ValueError('DeepMath decoding differs from approved experiment')
+        if (args.requests_per_minute,args.timeout,args.retries) != (30,14400,3):
+            raise ValueError('DeepMath request/retry limits differ from approved experiment')
+        if not args.local_runtime: raise ValueError('DeepMath requires the pinned local runtime')
+        from .local_runtime import identity
+        archived = Path('experiment_results/amc50_qwen38_autoround_int4/config.json')
+        expected = json.loads(archived.read_text())['local_runtime']['model']
+        if identity()['model'] != expected: raise ValueError('DeepMath model differs from archived AMC checkpoint')
+        atomic_json(root/'reference_preflight.json',reference_preflight(manifest))
+    else:
+        manifest = dataset_manifest(args.dataset,size,args.seed)
     settings = Settings(args.temperature,args.top_p,args.inference_seed,args.max_tokens,args.thinking,
                         args.concurrency,args.requests_per_minute,args.timeout,args.retries)
     source_hashes = {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('amc_repro').glob('*.py'))}
@@ -108,8 +134,9 @@ async def _main(args):
                 flow = Workflow(CachedClient(client,folder/'calls'),trace)
                 start = time.monotonic()
                 try:
-                    output = await flow.run(w,q['row']['problem'])  # No gold enters graph.
-                    grading = grade(output,q['gold_answer'])
+                    problem = q['row']['question'] if args.dataset_format == 'deepmath-screened' else q['row']['problem']
+                    output = await flow.run(w,problem)  # No labels or metadata enter graph.
+                    grading = grade_typed(output,q['reference']) if 'reference' in q else grade(output,q['gold_answer'])
                     status = 'completed'
                     error = None
                 except WorkflowOutputError as exc:
@@ -117,7 +144,7 @@ async def _main(args):
                 except Exception as exc:
                     output, grading, status, error = '', {'correct':False,'grading_status':'execution_failure','extracted_answer':None}, 'failed', str(exc)
                 # Retrospective grading only after generation/selection has finished.
-                candidates = [{'candidate_id':chr(65+i),'solution':s,**grade(s,q['gold_answer'])} for i,s in enumerate(flow.candidates)]
+                candidates = [{'candidate_id':chr(65+i),'solution':s,**(grade_typed(s,q['reference']) if 'reference' in q else grade(s,q['gold_answer']))} for i,s in enumerate(flow.candidates)]
                 selected = candidates[flow.selected] if flow.selected is not None else None
                 loss = None
                 if any(c['correct'] for c in candidates) and not grading['correct']:
@@ -126,7 +153,7 @@ async def _main(args):
                           'candidates':candidates,'selected_candidate_id':selected['candidate_id'] if selected else None,
                           'selected_solver':flow.category,'intermediate_correct_final_incorrect':bool(loss), 'loss_stage':loss,
                           'latency_this_attempt':time.monotonic()-start}
-                events = [json.loads(line) for line in (folder/'trace.jsonl').read_text().splitlines()]
+                events = [json.loads(line) for line in (folder/'trace.jsonl').read_text().splitlines()] if (folder/'trace.jsonl').exists() else []
                 calls = [e for e in events if e['event']=='llm_call']
                 usages = [e['usage'] for e in calls if e.get('usage')
                           and isinstance(e['usage'].get('prompt_tokens'),int)
@@ -158,6 +185,9 @@ async def _main(args):
 async def main(args):
     import fcntl
     root = Path(args.results_dir)
+    if args.dataset_format == 'deepmath-screened':
+        from .deepmath import require_scratch
+        require_scratch(root)
     root.mkdir(parents=True,exist_ok=True)
     with (root/'.runner.lock').open('a') as lock:
         try:

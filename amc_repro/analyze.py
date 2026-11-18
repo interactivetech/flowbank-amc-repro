@@ -103,7 +103,7 @@ def analyze(root, limit_items=None):
         for q in ids:
             for w in CONDITIONS:
                 out.write((root/'evaluations'/q/w/'trace.jsonl').read_text())
-    summary = (f"Evaluated {n} fixed AMC questions with {metadata['model']}. Baseline accuracy: {pct(stats['accuracy']['baseline'])}. "
+    summary = (f"Evaluated {n} fixed {'DeepMath' if manifest.get('dataset_format') == 'deepmath-screened' else 'AMC'} questions with {metadata['model']}. Baseline accuracy: {pct(stats['accuracy']['baseline'])}. "
                f"Best individual workflow: {pct(stats['best_individual_accuracy'])}; oracle coverage: {pct(stats['oracle_coverage'])}. "
                f"Complementarity gain: {100*stats['complementarity_gain']:.1f} percentage points "
                f"({round(n*stats['complementarity_gain'])} additional questions). Oracle exceeds baseline by "

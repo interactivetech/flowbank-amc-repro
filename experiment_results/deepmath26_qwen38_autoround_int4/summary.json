@@ -1,0 +1,149 @@
+{
+  "sample_size": 26,
+  "accuracy": {
+    "baseline": 0.6923076923076923,
+    "W1": 0.7307692307692307,
+    "W2": 0.8846153846153846,
+    "W3": 0.8846153846153846,
+    "W4": 0.8461538461538461
+  },
+  "oracle_coverage": 0.9615384615384616,
+  "best_individual_accuracy": 0.8846153846153846,
+  "complementarity_gain": 0.07692307692307698,
+  "oracle_minus_baseline": 0.2692307692307693,
+  "unique_wins": {
+    "W1": 2,
+    "W2": 6,
+    "W3": 5,
+    "W4": 6
+  },
+  "workflow_exclusive_wins": {
+    "W1": 0,
+    "W2": 0,
+    "W3": 1,
+    "W4": 0
+  },
+  "unsolved_count": 1,
+  "pairwise_overlap": {
+    "W1_W2": {
+      "intersection_count": 18,
+      "union_count": 24,
+      "jaccard": 0.75,
+      "both_wrong": 2,
+      "a_only": 1,
+      "b_only": 5
+    },
+    "W1_W3": {
+      "intersection_count": 19,
+      "union_count": 23,
+      "jaccard": 0.8260869565217391,
+      "both_wrong": 3,
+      "a_only": 0,
+      "b_only": 4
+    },
+    "W1_W4": {
+      "intersection_count": 17,
+      "union_count": 24,
+      "jaccard": 0.7083333333333334,
+      "both_wrong": 2,
+      "a_only": 2,
+      "b_only": 5
+    },
+    "W2_W3": {
+      "intersection_count": 21,
+      "union_count": 25,
+      "jaccard": 0.84,
+      "both_wrong": 1,
+      "a_only": 2,
+      "b_only": 2
+    },
+    "W2_W4": {
+      "intersection_count": 21,
+      "union_count": 24,
+      "jaccard": 0.875,
+      "both_wrong": 2,
+      "a_only": 2,
+      "b_only": 1
+    },
+    "W3_W4": {
+      "intersection_count": 20,
+      "union_count": 25,
+      "jaccard": 0.8,
+      "both_wrong": 1,
+      "a_only": 3,
+      "b_only": 2
+    }
+  },
+  "solution_loss": {
+    "W1": {
+      "aggregation": 2,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W2": {
+      "aggregation": 1,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W3": {
+      "aggregation": 2,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W4": {
+      "aggregation": 0,
+      "verification": 0,
+      "selection_parse_failure": 0
+    }
+  },
+  "no_correct_candidate_and_final_wrong": {
+    "W1": 5,
+    "W2": 2,
+    "W3": 1
+  },
+  "parsing_failures": {
+    "baseline": 1,
+    "W1": 3,
+    "W2": 0,
+    "W3": 1,
+    "W4": 1
+  },
+  "token_usage": {
+    "baseline": {
+      "mean_input": 174.81,
+      "mean_output": 7051.5,
+      "mean_total": 7226.31,
+      "mean_calls": 1.0,
+      "truncated_calls": 0
+    },
+    "W1": {
+      "mean_input": 3672.12,
+      "mean_output": 32135.54,
+      "mean_total": 35807.65,
+      "mean_calls": 4.0,
+      "truncated_calls": 1
+    },
+    "W2": {
+      "mean_input": 5108.12,
+      "mean_output": 44251.73,
+      "mean_total": 49359.85,
+      "mean_calls": 5.08,
+      "truncated_calls": 2
+    },
+    "W3": {
+      "mean_input": 4110.92,
+      "mean_output": 43506.58,
+      "mean_total": 47617.5,
+      "mean_calls": 5.0,
+      "truncated_calls": 3
+    },
+    "W4": {
+      "mean_input": 426.96,
+      "mean_output": 13582.96,
+      "mean_total": 14009.92,
+      "mean_calls": 2.0,
+      "truncated_calls": 1
+    }
+  },
+  "portfolio_mean_total_tokens": 146794.92
+}

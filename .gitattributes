@@ -1,0 +1,3 @@
+# Preserve byte-identical generated result artifacts and their source checksums.
+experiment_results/deepmath26_qwen38_autoround_int4/*.csv whitespace=cr-at-eol
+experiment_results/deepmath26_qwen38_autoround_int4/*.svg -whitespace

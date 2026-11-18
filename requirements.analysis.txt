@@ -1,0 +1,2 @@
+# Match the archived AMC figure renderer.
+matplotlib==3.10.8

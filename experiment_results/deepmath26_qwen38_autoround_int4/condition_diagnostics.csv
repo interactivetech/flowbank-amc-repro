@@ -1,0 +1,6 @@
+workflow_id,mean_input,mean_output,mean_total,mean_calls,truncated_calls,parsing_failures
+baseline,174.81,7051.5,7226.31,1.0,0,1
+W1,3672.12,32135.54,35807.65,4.0,1,3
+W2,5108.12,44251.73,49359.85,5.08,2,0
+W3,4110.92,43506.58,47617.5,5.0,3,1
+W4,426.96,13582.96,14009.92,2.0,1,1

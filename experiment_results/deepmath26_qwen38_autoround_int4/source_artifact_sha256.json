@@ -1,0 +1,16 @@
+{
+  "all_subset_coverage.csv": "4b8389511cca19b6b936306d12eb87d62af98481077f2d81eabad32e8a860b77",
+  "cohort_metrics.csv": "020e7d0cb168c2f73e6dc407d94cb1c37675abb755f682c1346f847dcd24339c",
+  "complementarity_by_k.csv": "68727feac50d12cd3e5e021fb0db5cf3384ded894729e3b8c7ae2c00ab9f054f",
+  "condition_diagnostics.csv": "15ed6da10584e25201e3de57c8016045badc318cd8ac016999d0e46e98135136",
+  "plot_environment.json": "3721d77238738731914557a9d339dbf425e90b1b4473fd18ac4d972df7e399cd",
+  "figure1_complementarity.png": "6b1cdc54424a44294e3bca2fe46b0db5af6f8b84cca3bbe182d132cb480c411a",
+  "figure1_complementarity.pdf": "2b64965f76718d8099421c38b0b114b00f2cc7668661de2c848cbb4f3f368f02",
+  "figure1_complementarity.svg": "b548f7f90f7d9aade420f87f0ea3c8b649bf40d3fd651fd98587114e4b861d42",
+  "table1_baseline.csv": "b2a43c284070be1d5eabbf3924d3e2d6ba601afe5bf61c3e13d5189b89dab37b",
+  "table1_baseline.md": "9e4bfed63c11da8663e08986a19622b9f4f79354c206a931e026992539271ff0",
+  "table1_baseline.tex": "5470b4bdc088ffc2d5729e3468a11cd48350de7d46c0ec4e6e961808dcf73484",
+  "table2_portfolio.csv": "8de692c5c22b9f653731ecc689fa4a39c47bb044f53d8b5d1fe1d0edfbd260b6",
+  "table2_portfolio.md": "333c3da8fbe7f82175715704f0f9e0cf57085e9a9d1711944b3b142824ce1e17",
+  "table2_portfolio.tex": "a7a58de9da544d00d7bf1d6db464ec2754f99b1ba3f50d95ae2e5e923be61a38"
+}
