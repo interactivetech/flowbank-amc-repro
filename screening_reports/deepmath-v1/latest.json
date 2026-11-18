@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 1249.11,
-    "checkpointed_active_seconds": 1189.11,
+    "charged_upper_bound_seconds": 1362.29,
+    "checkpointed_active_seconds": 1302.29,
     "interruption_reserve_seconds": 60,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 85150.89
+    "remaining_seconds_lower_bound": 85037.71
   },
   "calibration": [
     {
@@ -61,7 +61,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-18T21:21:37.931130+00:00",
+  "generated_at_utc": "2026-11-18T21:23:31.237366+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
