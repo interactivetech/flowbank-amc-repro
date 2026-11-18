@@ -19,3 +19,5 @@ Model downloading, model serving, and inference are explicit user-run operations
 DeepMath completed results: [26-item report, tables, and figures](experiment_results/deepmath26_qwen38_autoround_int4/README.md). Baseline solved 18/26 (69.2%), best individual 23/26 (88.5%), and four-workflow oracle 25/26 (96.2%): a 7.7-point gain beyond the best individual. Gains did not increase monotonically with historical screening difficulty. See the [approved plan](DEEPMATH_EXPERIMENT_PLAN.md) and [run and plotting commands](RUN_DEEPMATH.md).
 
 A separate [RedHatAI checkpoint rerun](REDHAT_DEEPMATH_RERUN.md) was authorized on November 18 to investigate the screening discrepancy; it preserves the original AutoRound results.
+
+Hourly screening progress is published on this branch in [screening_reports/deepmath-v1/](screening_reports/deepmath-v1/). Reporter operation and privacy rules are in [monitoring/README.md](monitoring/README.md). The scientific screening source remains pinned on `slurm_env`.
