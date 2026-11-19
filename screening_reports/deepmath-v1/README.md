@@ -1,26 +1,26 @@
 # DeepMath screening progress
 
-Updated: 2026-11-19T06:12:23.971439+00:00
+Updated: 2026-11-19T07:13:28.740433+00:00
 
 Screening source: `61969f4a8c01410c6a72e68d56cad764d08bbd72`.
 
-**4 fully screened; 5 triaged; 158 sampled responses completed.**
+**9 fully screened; 10 triaged; 299 sampled responses completed.**
 
-Checkpointed active time: 9.18 hours / 24 hours; interruption reserve: 60 seconds.
+Checkpointed active time: 10.19 hours / 24 hours; interruption reserve: 60 seconds.
 
 Screening complete: False. Audit lock present: False. Recent heartbeat: True.
 
 | Bucket | Fully screened | Provisional | Audit accepted | Target |
 |---|---:|---:|---:|---:|
-| 0/32 | 1 | 1 | 0 | 5 |
-| 1-8/32 | 0 | 0 | 0 | 5 |
+| 0/32 | 2 | 2 | 0 | 5 |
+| 1-8/32 | 1 | 1 | 0 | 5 |
 | 9-16/32 | 1 | 1 | 0 | 5 |
 | 17-24/32 | 0 | 0 | 0 | 5 |
-| 25-32/32 | 2 | 2 | 0 | 5 |
+| 25-32/32 | 5 | 5 | 0 | 5 |
 
 ## Current question requests
 
-No outstanding sampled requests observed.
+- `deepmath-row-17600`
 
 See [questions.csv](questions.csv) for every question with activity, [latest.json](latest.json) for diagnostics, and [history/](history/) for hourly snapshots.
 
