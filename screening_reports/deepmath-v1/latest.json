@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 62292.51,
-    "checkpointed_active_seconds": 62232.51,
+    "charged_upper_bound_seconds": 65899.76,
+    "checkpointed_active_seconds": 65839.76,
     "interruption_reserve_seconds": 60,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 24107.49
+    "remaining_seconds_lower_bound": 20500.24
   },
   "calibration": [
     {
@@ -51,7 +51,7 @@
     }
   ],
   "current_questions": [
-    "deepmath-row-74396"
+    "deepmath-row-4343"
   ],
   "dataset": {
     "candidates": 101824,
@@ -61,7 +61,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-19T14:19:02.213183+00:00",
+  "generated_at_utc": "2026-11-19T15:19:09.385129+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -490,23 +490,42 @@
       "greedy_completed": false,
       "observed_solve_rate": 1.0,
       "parse_failures": 0,
+      "pending_sampled_slots": [],
+      "phase": "triaged",
+      "provisional_selected": false,
+      "question_id": "deepmath-row-74396",
+      "sampled_completed": 8,
+      "sampled_correct": 8,
+      "triage_correct": 8,
+      "truncated": 0
+    },
+    {
+      "audit_status": "pending",
+      "bucket": null,
+      "candidate_order": 24,
+      "dataset_row": 4343,
+      "grading_failures": 0,
+      "greedy_completed": false,
+      "observed_solve_rate": 0.0,
+      "parse_failures": 1,
       "pending_sampled_slots": [
-        3
+        18,
+        19
       ],
       "phase": "partial",
       "provisional_selected": false,
-      "question_id": "deepmath-row-74396",
-      "sampled_completed": 3,
-      "sampled_correct": 3,
-      "triage_correct": null,
-      "truncated": 0
+      "question_id": "deepmath-row-4343",
+      "sampled_completed": 18,
+      "sampled_correct": 0,
+      "triage_correct": 0,
+      "truncated": 1
     }
   ],
   "run": "deepmath-v1",
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
     "completion_reason": null,
-    "heartbeat_age_seconds": 0.4,
+    "heartbeat_age_seconds": 0.3,
     "heartbeat_recent": true,
     "locked": false,
     "screening_complete": false
@@ -514,13 +533,13 @@
   "summary": {
     "grading_failures": 0,
     "infrastructure_failures": 0,
-    "parse_failures": 70,
+    "parse_failures": 71,
     "questions_fully_screened": 12,
-    "questions_triaged": 23,
-    "questions_with_activity": 24,
-    "questions_with_sampled_results": 24,
+    "questions_triaged": 25,
+    "questions_with_activity": 25,
+    "questions_with_sampled_results": 25,
     "reference_quarantines": 0,
-    "sampled_responses": 475,
-    "truncated": 10
+    "sampled_responses": 498,
+    "truncated": 11
   }
 }
