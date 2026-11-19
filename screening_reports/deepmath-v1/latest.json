@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 51348.5,
-    "checkpointed_active_seconds": 51288.5,
+    "charged_upper_bound_seconds": 54994.8,
+    "checkpointed_active_seconds": 54934.8,
     "interruption_reserve_seconds": 60,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 35051.5
+    "remaining_seconds_lower_bound": 31405.2
   },
   "calibration": [
     {
@@ -61,7 +61,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-19T11:16:38.161593+00:00",
+  "generated_at_utc": "2026-11-19T12:17:24.555890+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -470,25 +470,26 @@
       "dataset_row": 72565,
       "grading_failures": 0,
       "greedy_completed": false,
-      "observed_solve_rate": 0.6666666666666666,
-      "parse_failures": 1,
+      "observed_solve_rate": 0.75,
+      "parse_failures": 4,
       "pending_sampled_slots": [
-        3
+        16,
+        17
       ],
       "phase": "partial",
       "provisional_selected": false,
       "question_id": "deepmath-row-72565",
-      "sampled_completed": 3,
-      "sampled_correct": 2,
-      "triage_correct": null,
-      "truncated": 0
+      "sampled_completed": 16,
+      "sampled_correct": 12,
+      "triage_correct": 5,
+      "truncated": 2
     }
   ],
   "run": "deepmath-v1",
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
     "completion_reason": null,
-    "heartbeat_age_seconds": 0.3,
+    "heartbeat_age_seconds": 0,
     "heartbeat_recent": true,
     "locked": false,
     "screening_complete": false
@@ -496,13 +497,13 @@
   "summary": {
     "grading_failures": 0,
     "infrastructure_failures": 0,
-    "parse_failures": 62,
+    "parse_failures": 65,
     "questions_fully_screened": 11,
-    "questions_triaged": 22,
+    "questions_triaged": 23,
     "questions_with_activity": 23,
     "questions_with_sampled_results": 23,
     "reference_quarantines": 0,
-    "sampled_responses": 443,
-    "truncated": 3
+    "sampled_responses": 456,
+    "truncated": 5
   }
 }
