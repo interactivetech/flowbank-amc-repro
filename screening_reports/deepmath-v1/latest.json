@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 29474.66,
-    "checkpointed_active_seconds": 29414.66,
+    "charged_upper_bound_seconds": 33094.71,
+    "checkpointed_active_seconds": 33034.71,
     "interruption_reserve_seconds": 60,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 56925.34
+    "remaining_seconds_lower_bound": 53305.29
   },
   "calibration": [
     {
@@ -50,9 +50,7 @@
       "correct": true
     }
   ],
-  "current_questions": [
-    "deepmath-row-24193"
-  ],
+  "current_questions": [],
   "dataset": {
     "candidates": 101824,
     "excluded_previous_questions": 26,
@@ -61,7 +59,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-19T05:12:04.259638+00:00",
+  "generated_at_utc": "2026-11-19T06:12:23.971439+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -147,24 +145,22 @@
       "grading_failures": 0,
       "greedy_completed": false,
       "observed_solve_rate": 0.0,
-      "parse_failures": 1,
-      "pending_sampled_slots": [
-        19
-      ],
+      "parse_failures": 3,
+      "pending_sampled_slots": [],
       "phase": "partial",
       "provisional_selected": false,
       "question_id": "deepmath-row-24193",
-      "sampled_completed": 19,
+      "sampled_completed": 30,
       "sampled_correct": 0,
       "triage_correct": 0,
-      "truncated": 0
+      "truncated": 1
     }
   ],
   "run": "deepmath-v1",
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
     "completion_reason": null,
-    "heartbeat_age_seconds": 0.3,
+    "heartbeat_age_seconds": 0,
     "heartbeat_recent": true,
     "locked": false,
     "screening_complete": false
@@ -172,13 +168,13 @@
   "summary": {
     "grading_failures": 0,
     "infrastructure_failures": 0,
-    "parse_failures": 30,
+    "parse_failures": 32,
     "questions_fully_screened": 4,
     "questions_triaged": 5,
     "questions_with_activity": 5,
     "questions_with_sampled_results": 5,
     "reference_quarantines": 0,
-    "sampled_responses": 147,
-    "truncated": 2
+    "sampled_responses": 158,
+    "truncated": 3
   }
 }
