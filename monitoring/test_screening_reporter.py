@@ -133,6 +133,7 @@ def test_hourly_schedule_deduplicates_and_stop_marker(tmp_path,monkeypatch):
     assert r.schedule(root,tmp_path,until)=='42'
     assert sum(c[0]=='sbatch' for c in calls)==1
     assert '--begin=now+60minutes' in calls[0]
+    assert '--nodelist=cml38' in calls[0]
     (root/'reporting/STOP').touch()
     assert r.schedule(root,tmp_path,until) is None
 

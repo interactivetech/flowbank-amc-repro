@@ -243,7 +243,7 @@ def schedule(root, checkout, until):
         if status in ('PENDING','RUNNING','CONFIGURING','SUSPENDED'):
             return job
     script=checkout/'monitoring/hourly_report.sbatch'
-    command=['sbatch','--parsable','--begin=now+60minutes',
+    command=['sbatch','--parsable','--nodelist=cml38','--begin=now+60minutes',
              '--output='+str(state/'report-%j.log'),str(script),str(root),str(checkout),until.isoformat()]
     job=subprocess.check_output(command,text=True).strip()
     atomic(state/'schedule.json',dict(job_id=job,scheduled_at_utc=datetime.now(timezone.utc).isoformat(),

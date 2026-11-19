@@ -2,6 +2,7 @@
 #SBATCH --account=cml-furongh
 #SBATCH --partition=cml-furongh
 #SBATCH --qos=cml-default
+#SBATCH --nodelist=cml38
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=1G
 #SBATCH --time=00:10:00
