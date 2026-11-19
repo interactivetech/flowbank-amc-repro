@@ -1,0 +1,17 @@
+question_id,dataset_row,candidate_order,phase,sampled_completed,sampled_correct,observed_solve_rate,triage_correct,bucket,provisional_selected,audit_status,greedy_completed,parse_failures,grading_failures,truncated,pending_sampled_slots
+deepmath-row-28981,28981,0,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-11841,11841,1,fully_screened,32,14,0.4375,3,9-16/32,True,pending,True,4,0,2,[]
+deepmath-row-68549,68549,2,fully_screened,32,0,0.0,0,0/32,True,pending,True,25,0,0,[]
+deepmath-row-52747,52747,3,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-24193,24193,4,fully_screened,32,0,0.0,0,0/32,True,pending,True,3,0,1,[]
+deepmath-row-7197,7197,5,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-17830,17830,6,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-100236,100236,7,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-77420,77420,8,fully_screened,32,1,0.03125,0,1-8/32,True,pending,True,16,0,0,[]
+deepmath-row-2362,2362,9,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
+deepmath-row-17600,17600,10,fully_screened,32,0,0.0,0,0/32,True,pending,True,0,0,0,[]
+deepmath-row-23125,23125,11,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
+deepmath-row-48634,48634,12,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
+deepmath-row-26857,26857,13,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
+deepmath-row-30890,30890,14,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
+deepmath-row-21363,21363,15,partial,6,6,1.0,,,False,pending,False,0,0,0,"[6, 7]"
