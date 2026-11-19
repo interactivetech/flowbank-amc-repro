@@ -9,4 +9,4 @@ deepmath-row-17830,17830,6,fully_screened,32,32,1.0,8,25-32/32,True,pending,True
 deepmath-row-100236,100236,7,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
 deepmath-row-77420,77420,8,fully_screened,32,1,0.03125,0,1-8/32,True,pending,True,16,0,0,[]
 deepmath-row-2362,2362,9,triaged,8,8,1.0,8,,False,pending,False,0,0,0,[]
-deepmath-row-17600,17600,10,partial,3,0,0.0,,,False,pending,False,0,0,0,[3]
+deepmath-row-17600,17600,10,partial,20,0,0.0,0,,False,pending,False,0,0,0,"[20, 21]"
