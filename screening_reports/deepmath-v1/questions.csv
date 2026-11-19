@@ -1,2 +1,4 @@
 question_id,dataset_row,candidate_order,phase,sampled_completed,sampled_correct,observed_solve_rate,triage_correct,bucket,provisional_selected,audit_status,greedy_completed,parse_failures,grading_failures,truncated,pending_sampled_slots
-deepmath-row-28981,28981,0,partial,6,6,1.0,,,False,pending,False,0,0,0,"[6, 7]"
+deepmath-row-28981,28981,0,fully_screened,32,32,1.0,8,25-32/32,True,pending,True,0,0,0,[]
+deepmath-row-11841,11841,1,fully_screened,32,14,0.4375,3,9-16/32,True,pending,True,4,0,2,[]
+deepmath-row-68549,68549,2,partial,15,0,0.0,0,,False,pending,False,13,0,0,[14]
