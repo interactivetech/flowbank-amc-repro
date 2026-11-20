@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 71262.16,
-    "checkpointed_active_seconds": 71202.16,
+    "charged_upper_bound_seconds": 74861.5,
+    "checkpointed_active_seconds": 74801.5,
     "interruption_reserve_seconds": 60,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 15137.84
+    "remaining_seconds_lower_bound": 11538.5
   },
   "calibration": [
     {
@@ -51,7 +51,7 @@
     }
   ],
   "current_questions": [
-    "deepmath-row-43921"
+    "deepmath-row-4072"
   ],
   "dataset": {
     "candidates": 101824,
@@ -61,7 +61,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-20T02:01:14.262166+00:00",
+  "generated_at_utc": "2026-11-20T03:01:14.267602+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -652,15 +652,86 @@
       "greedy_completed": false,
       "observed_solve_rate": 0.0,
       "parse_failures": 0,
+      "pending_sampled_slots": [],
+      "phase": "triaged",
+      "provisional_selected": false,
+      "question_id": "deepmath-row-43921",
+      "sampled_completed": 8,
+      "sampled_correct": 0,
+      "triage_correct": 0,
+      "truncated": 0
+    },
+    {
+      "audit_status": "pending",
+      "bucket": null,
+      "candidate_order": 33,
+      "dataset_row": 23634,
+      "grading_failures": 0,
+      "greedy_completed": false,
+      "observed_solve_rate": 1.0,
+      "parse_failures": 0,
+      "pending_sampled_slots": [],
+      "phase": "triaged",
+      "provisional_selected": false,
+      "question_id": "deepmath-row-23634",
+      "sampled_completed": 8,
+      "sampled_correct": 8,
+      "triage_correct": 8,
+      "truncated": 0
+    },
+    {
+      "audit_status": "pending",
+      "bucket": null,
+      "candidate_order": 34,
+      "dataset_row": 37921,
+      "grading_failures": 0,
+      "greedy_completed": false,
+      "observed_solve_rate": 1.0,
+      "parse_failures": 0,
+      "pending_sampled_slots": [],
+      "phase": "triaged",
+      "provisional_selected": false,
+      "question_id": "deepmath-row-37921",
+      "sampled_completed": 8,
+      "sampled_correct": 8,
+      "triage_correct": 8,
+      "truncated": 0
+    },
+    {
+      "audit_status": "pending",
+      "bucket": null,
+      "candidate_order": 35,
+      "dataset_row": 32881,
+      "grading_failures": 0,
+      "greedy_completed": false,
+      "observed_solve_rate": 1.0,
+      "parse_failures": 0,
+      "pending_sampled_slots": [],
+      "phase": "triaged",
+      "provisional_selected": false,
+      "question_id": "deepmath-row-32881",
+      "sampled_completed": 8,
+      "sampled_correct": 8,
+      "triage_correct": 8,
+      "truncated": 0
+    },
+    {
+      "audit_status": "pending",
+      "bucket": null,
+      "candidate_order": 36,
+      "dataset_row": 4072,
+      "grading_failures": 0,
+      "greedy_completed": false,
+      "observed_solve_rate": 1.0,
+      "parse_failures": 0,
       "pending_sampled_slots": [
-        2,
-        3
+        6
       ],
       "phase": "partial",
       "provisional_selected": false,
-      "question_id": "deepmath-row-43921",
-      "sampled_completed": 2,
-      "sampled_correct": 0,
+      "question_id": "deepmath-row-4072",
+      "sampled_completed": 7,
+      "sampled_correct": 7,
       "triage_correct": null,
       "truncated": 0
     }
@@ -669,7 +740,7 @@
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
     "completion_reason": null,
-    "heartbeat_age_seconds": 0,
+    "heartbeat_age_seconds": 0.5,
     "heartbeat_recent": true,
     "locked": false,
     "screening_complete": false
@@ -679,11 +750,11 @@
     "infrastructure_failures": 0,
     "parse_failures": 71,
     "questions_fully_screened": 14,
-    "questions_triaged": 32,
-    "questions_with_activity": 33,
-    "questions_with_sampled_results": 33,
+    "questions_triaged": 36,
+    "questions_with_activity": 37,
+    "questions_with_sampled_results": 37,
     "reference_quarantines": 0,
-    "sampled_responses": 594,
+    "sampled_responses": 631,
     "truncated": 11
   }
 }
