@@ -32,11 +32,11 @@
     }
   },
   "budget": {
-    "charged_upper_bound_seconds": 85661.55,
-    "checkpointed_active_seconds": 85601.55,
-    "interruption_reserve_seconds": 60,
+    "charged_upper_bound_seconds": 86400.06,
+    "checkpointed_active_seconds": 86400.06,
+    "interruption_reserve_seconds": 0,
     "limit_seconds": 86400,
-    "remaining_seconds_lower_bound": 738.45
+    "remaining_seconds_lower_bound": 0
   },
   "calibration": [
     {
@@ -50,9 +50,7 @@
       "correct": true
     }
   ],
-  "current_questions": [
-    "deepmath-row-60908"
-  ],
+  "current_questions": [],
   "dataset": {
     "candidates": 101824,
     "excluded_previous_questions": 26,
@@ -61,7 +59,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-20T06:01:14.498794+00:00",
+  "generated_at_utc": "2026-11-20T07:02:35.854198+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -1010,16 +1008,13 @@
       "dataset_row": 60908,
       "grading_failures": 0,
       "greedy_completed": false,
-      "observed_solve_rate": null,
+      "observed_solve_rate": 0.0,
       "parse_failures": 0,
-      "pending_sampled_slots": [
-        0,
-        1
-      ],
-      "phase": "requested",
+      "pending_sampled_slots": [],
+      "phase": "partial",
       "provisional_selected": false,
       "question_id": "deepmath-row-60908",
-      "sampled_completed": 0,
+      "sampled_completed": 1,
       "sampled_correct": 0,
       "triage_correct": null,
       "truncated": 0
@@ -1028,22 +1023,22 @@
   "run": "deepmath-v1",
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
-    "completion_reason": null,
-    "heartbeat_age_seconds": 0,
-    "heartbeat_recent": true,
+    "completion_reason": "budget_exhausted",
+    "heartbeat_age_seconds": 2883.5,
+    "heartbeat_recent": false,
     "locked": false,
-    "screening_complete": false
+    "screening_complete": true
   },
   "summary": {
     "grading_failures": 0,
-    "infrastructure_failures": 0,
+    "infrastructure_failures": 1,
     "parse_failures": 76,
     "questions_fully_screened": 15,
     "questions_triaged": 52,
     "questions_with_activity": 53,
-    "questions_with_sampled_results": 52,
+    "questions_with_sampled_results": 53,
     "reference_quarantines": 0,
-    "sampled_responses": 776,
+    "sampled_responses": 777,
     "truncated": 16
   }
 }
