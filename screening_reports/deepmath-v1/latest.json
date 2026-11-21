@@ -59,7 +59,7 @@
     "source_rows": 103022
   },
   "format_version": 1,
-  "generated_at_utc": "2026-11-21T09:00:37.337033+00:00",
+  "generated_at_utc": "2026-11-21T10:01:17.889235+00:00",
   "model": {
     "repository": "RedHatAI/Qwen3.8-27B-INT4",
     "revision": "e45c27e8f463817db788d141a73a3c235a0a7c0c"
@@ -1024,7 +1024,7 @@
   "screening_commit": "61969f4a8c01410c6a72e68d56cad764d08bbd72",
   "state": {
     "completion_reason": "budget_exhausted",
-    "heartbeat_age_seconds": 96364.9,
+    "heartbeat_age_seconds": 100005.5,
     "heartbeat_recent": false,
     "locked": false,
     "screening_complete": true
