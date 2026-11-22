@@ -1,0 +1,208 @@
+{
+  "sample_size": 21,
+  "accuracy": {
+    "baseline": 0.47619047619047616,
+    "W1": 0.5714285714285714,
+    "W2": 0.47619047619047616,
+    "W3": 0.5238095238095238,
+    "W4": 0.5714285714285714
+  },
+  "oracle_coverage": 0.7619047619047619,
+  "best_individual_accuracy": 0.5714285714285714,
+  "complementarity_gain": 0.19047619047619047,
+  "oracle_minus_baseline": 0.2857142857142857,
+  "unique_wins": {
+    "W1": 2,
+    "W2": 1,
+    "W3": 2,
+    "W4": 5
+  },
+  "workflow_exclusive_wins": {
+    "W1": 1,
+    "W2": 0,
+    "W3": 0,
+    "W4": 3
+  },
+  "unsolved_count": 5,
+  "pairwise_overlap": {
+    "W1_W2": {
+      "intersection_count": 9,
+      "union_count": 13,
+      "jaccard": 0.6923076923076923,
+      "both_wrong": 8,
+      "a_only": 3,
+      "b_only": 1
+    },
+    "W1_W3": {
+      "intersection_count": 10,
+      "union_count": 13,
+      "jaccard": 0.7692307692307693,
+      "both_wrong": 8,
+      "a_only": 2,
+      "b_only": 1
+    },
+    "W1_W4": {
+      "intersection_count": 8,
+      "union_count": 16,
+      "jaccard": 0.5,
+      "both_wrong": 5,
+      "a_only": 4,
+      "b_only": 4
+    },
+    "W2_W3": {
+      "intersection_count": 9,
+      "union_count": 12,
+      "jaccard": 0.75,
+      "both_wrong": 9,
+      "a_only": 1,
+      "b_only": 2
+    },
+    "W2_W4": {
+      "intersection_count": 8,
+      "union_count": 14,
+      "jaccard": 0.5714285714285714,
+      "both_wrong": 7,
+      "a_only": 2,
+      "b_only": 4
+    },
+    "W3_W4": {
+      "intersection_count": 9,
+      "union_count": 14,
+      "jaccard": 0.6428571428571429,
+      "both_wrong": 7,
+      "a_only": 2,
+      "b_only": 3
+    }
+  },
+  "solution_loss": {
+    "W1": {
+      "aggregation": 1,
+      "verification": 0,
+      "selection_parse_failure": 0
+    },
+    "W2": {
+      "aggregation": 0,
+      "verification": 1,
+      "selection_parse_failure": 0
+    },
+    "W3": {
+      "aggregation": 1,
+      "verification": 1,
+      "selection_parse_failure": 1
+    },
+    "W4": {
+      "aggregation": 0,
+      "verification": 0,
+      "selection_parse_failure": 0
+    }
+  },
+  "no_correct_candidate_and_final_wrong": {
+    "W1": 8,
+    "W2": 10,
+    "W3": 7
+  },
+  "parsing_failures": {
+    "baseline": 6,
+    "W1": 2,
+    "W2": 4,
+    "W3": 6,
+    "W4": 2
+  },
+  "model_metadata": {
+    "base_url": "http://127.0.0.1:8000/v1/",
+    "model": "qwen3.8-27b-redhat-int4-e45c27e8f463",
+    "request_parameters": {
+      "model": "qwen3.8-27b-redhat-int4-e45c27e8f463",
+      "temperature": 0,
+      "top_p": 1,
+      "max_tokens": 131072,
+      "seed": 42,
+      "extra_body": {
+        "chat_template_kwargs": {
+          "enable_thinking": true
+        }
+      }
+    },
+    "client_settings": {
+      "temperature": 0,
+      "top_p": 1,
+      "seed": 42,
+      "max_tokens": 131072,
+      "thinking": "on",
+      "concurrency": 2,
+      "requests_per_minute": 30,
+      "timeout": 14400,
+      "retries": 3
+    },
+    "models_response": {
+      "data": [
+        {
+          "id": "qwen3.8-27b-redhat-int4-e45c27e8f463",
+          "created": 1795323965,
+          "object": "model",
+          "owned_by": "vllm",
+          "shutdown_date": null,
+          "root": "/scratch1/mendeza/flowbank-amc/cache/huggingface/hub/models--RedHatAI--Qwen3.8-27B-INT4/snapshots/e45c27e8f463817db788d141a73a3c235a0a7c0c",
+          "parent": null,
+          "max_model_len": 262144,
+          "permission": [
+            {
+              "id": "modelperm-ba460fd460adf861",
+              "object": "model_permission",
+              "created": 1795323965,
+              "allow_create_engine": false,
+              "allow_sampling": true,
+              "allow_logprobs": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "allow_fine_tuning": false,
+              "organization": "*",
+              "group": null,
+              "is_blocking": false
+            }
+          ]
+        }
+      ],
+      "object": "list"
+    },
+    "model_label": "Qwen3.8-27B RedHatAI INT4"
+  },
+  "token_usage": {
+    "baseline": {
+      "mean_input": 165.67,
+      "mean_output": 29886.62,
+      "mean_total": 30052.29,
+      "mean_calls": 1.0,
+      "truncated_calls": 1
+    },
+    "W1": {
+      "mean_input": 3110.0,
+      "mean_output": 80031.05,
+      "mean_total": 83141.05,
+      "mean_calls": 4.0,
+      "truncated_calls": 2
+    },
+    "W2": {
+      "mean_input": 4364.38,
+      "mean_output": 131486.9,
+      "mean_total": 135851.29,
+      "mean_calls": 5.0,
+      "truncated_calls": 8
+    },
+    "W3": {
+      "mean_input": 4026.81,
+      "mean_output": 121445.24,
+      "mean_total": 125472.05,
+      "mean_calls": 5.0,
+      "truncated_calls": 6
+    },
+    "W4": {
+      "mean_input": 407.52,
+      "mean_output": 26797.67,
+      "mean_total": 27205.19,
+      "mean_calls": 2.0,
+      "truncated_calls": 0
+    }
+  },
+  "portfolio_mean_total_tokens": 371669.58
+}
