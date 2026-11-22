@@ -12,9 +12,10 @@ from scripts.plot_workflow_complementarity import subset_coverage, write_csv
 def cohort_metrics(frozen, results):
     rows = []
     # Membership comes only from the immutable screening manifest.
-    for threshold, expected in zip(THRESHOLDS, COUNTS):
+    for threshold in THRESHOLDS:
         ids = frozen['cohorts'][str(threshold)]
-        if len(ids) != expected: raise ValueError('Frozen cohort size mismatch')
+        expected = [q['question_id'] for q in frozen['questions'] if q['screening']['solve_rate'] <= threshold]
+        if ids != expected: raise ValueError('Frozen cohort membership mismatch')
         stats = statistics(results, ids)
         n = len(ids)
         best = max(WF, key=lambda w:stats['accuracy'][w])
@@ -28,9 +29,9 @@ def cohort_metrics(frozen, results):
     return rows
 
 
-def inspect_pilot(root):
+def inspect_pilot(root, allow_provisional=False):
     root = require_scratch(root)
-    frozen = load_frozen(root/'manifest.json')
+    frozen = load_frozen(root/'manifest.json', allow_provisional=allow_provisional)
     ids = {q['question_id'] for q in frozen['questions'][:5]}
     records = [json.loads(p.read_text()) for p in root.glob('evaluations/*/*/result.json') if p.parent.parent.name in ids]
     records += [json.loads(p.read_text()) for p in root.glob('evaluations/*/*/failure.json') if p.parent.parent.name in ids and not (p.parent/'result.json').exists()]
@@ -40,8 +41,10 @@ def inspect_pilot(root):
     completed = sum(r['status']=='completed' for r in records)
     latency = sum(e.get('latency',0) for e in calls)
     tokens = sum(e.get('usage',{}).get('completion_tokens',0) or 0 for e in calls if e.get('usage'))
-    complete = completed == 25
-    report = {'completed':completed,'expected':25,'model_call_attempts':len(calls),
+    expected = len(ids)*len(CONDITIONS)
+    remaining = (len(frozen['questions'])-len(ids))*len(CONDITIONS)
+    complete = completed == expected
+    report = {'completed':completed,'expected':expected,'model_call_attempts':len(calls),
         'summed_request_latency_seconds':latency,'completion_tokens':tokens,
         'usage_complete':bool(calls) and all(e.get('usage') and isinstance(e['usage'].get('completion_tokens'),int) for e in calls),
         'completion_tokens_per_summed_request_second':tokens/latency if latency else None,
@@ -49,10 +52,12 @@ def inspect_pilot(root):
         'parsing_failures':sum(r['grading_status']=='parse_failure' for r in records),
         'code_execution_errors':sum(e['event']=='code_execution' and e.get('status')!='Success' for e in events),
         'context_overflows':sum(e['event']=='context_overflow' for e in events),
+        'grading_failures':sum(r['grading_status']=='grading_failure' for r in records),
+        'audit_status':frozen.get('audit_status','historical'),
         'failed_evaluations':sum(r['status']!='completed' for r in records),
-        'remaining_evaluations_after_pilot':105,
-        'estimated_remaining_hours':latency/2*(105/25)/3600 if complete and latency else None,
-        'estimate_method':'Summed pilot request latency / concurrency 2, scaled by 105/25; approximate, not an allocation guarantee. Harder questions and retries may take longer.',
+        'remaining_evaluations_after_pilot':remaining,
+        'estimated_remaining_hours':latency/2*(remaining/expected)/3600 if complete and latency else None,
+        'estimate_method':f'Summed pilot request latency / concurrency 2, scaled by {remaining}/{expected}; approximate, not an allocation guarantee. Harder questions and retries may take longer.',
         'failures':[{'question_id':r['question_id'],'workflow_id':r['workflow_id'],'error':r.get('error')} for r in records if r.get('error')]}
     atomic_json(root/'pilot_inspection.json',report)
     if complete: analyze(root,5)
@@ -98,7 +103,7 @@ def render_coverage(output, coverage, cohorts):
     upper.set(ylim=(0,100),ylabel='Final-answer accuracy (%)',title='Oracle performance on progressively harder questions')
     upper.legend(fontsize=9)
     lower.plot(x,[r['gain_pp'] for r in cohorts],'o-',color='#0072B2')
-    lower.set(ylabel='Oracle − best (pp)',xlabel='Maximum historical screening solve rate (difficulty increases →)',
+    lower.set(ylabel='Oracle − best (pp)',xlabel='Maximum frozen screening solve rate (difficulty increases →)',
               ylim=(0,min(100,max(5,max(r['gain_pp'] for r in cohorts)*1.25))))
     lower.set_xticks(x,[f'{100*r["max_screening_rate"]:g}%\nN={r["N"]}' for r in cohorts])
     for ax in (upper,lower): ax.grid(axis='y',alpha=.2)
@@ -109,14 +114,15 @@ def render_coverage(output, coverage, cohorts):
     atomic_json(output/'plot_environment.json',{'matplotlib':matplotlib.__version__})
 
 
-def final_analysis(root, amc_root):
+def final_analysis(root, amc_root, allow_provisional=False):
     root = require_scratch(root)
-    frozen = load_frozen(root/'manifest.json')
+    frozen = load_frozen(root/'manifest.json', allow_provisional=allow_provisional)
     records = [json.loads(p.read_text()) for p in root.glob('evaluations/*/*/result.json')]
     results = {(r['question_id'],r['workflow_id']):r for r in records}
     ids = [q['question_id'] for q in frozen['questions']]
-    stats = statistics(results,ids)  # Refuse all final output until all 130 are complete.
-    if len(results) != 130: raise ValueError('Expected exactly 130 evaluations')
+    stats = statistics(results,ids)  # Refuse final output until every condition completes.
+    expected = len(ids)*len(CONDITIONS)
+    if len(results) != expected: raise ValueError(f'Expected exactly {expected} evaluations')
     stats = analyze(root)
     output = root/'comparison'
     output.mkdir(exist_ok=True)
@@ -139,20 +145,25 @@ def final_analysis(root, amc_root):
     write_csv(output/'condition_diagnostics.csv',[{'workflow_id':w,**stats['token_usage'][w],
         'parsing_failures':stats['parsing_failures'][w]} for w in CONDITIONS])
     render_figures(output,[('AMC',amc),('DeepMath',deep)],cohorts)
-    report = (f'# DeepMath workflow complementarity\n\nAll 130 fresh evaluations on 26 adaptively screened questions are complete. '
+    report = (f'# DeepMath workflow complementarity\n\nAll {expected} fresh evaluations on {len(ids)} adaptively screened questions are complete. '
         f'Baseline: {100*stats["accuracy"]["baseline"]:.1f}%; best individual: {100*stats["best_individual_accuracy"]:.1f}%; '
         f'four-workflow oracle: {100*stats["oracle_coverage"]:.1f}%; gain: {100*stats["complementarity_gain"]:.1f} percentage points.\n\n'
-        'Historical correct/32 values are screening difficulty labels, not baseline results. Original decoding, quantization and grading settings are undocumented. '
-        'Without the original responses, low screening rates cannot be separated from grading differences. Conclusions apply to these 26 questions. '
+        f'Screening correct/32 values are frozen selection labels, not fresh baseline results. Conclusions apply to these {len(ids)} selected questions. '
         'Oracle uses final answers and ground truth retrospectively; it is an upper bound, not a deployable selector. '
-        'Cohorts overlap and are defined solely by frozen historical rates. 0/32 means no observed screening successes, not unsolvability. '
+        'Cohorts overlap and are defined solely by frozen screening rates. 0/32 means no observed screening successes, not unsolvability. '
         'Best individual is recomputed within each cohort.\n\n'
         '![Complementarity](figure1_complementarity.png)\n\n![Harder cohorts](figure2_harder_cohorts.png)\n\n'
         '| Maximum screening rate | N | Oracle solved | Best individual solved | Baseline solved | Gain (pp) |\n|---|---|---|---|---|---|\n')
     report += ''.join(f'| {100*r["max_screening_rate"]:g}% | {r["N"]} | {r["oracle_solved"]} | {r["best_individual_solved"]} | {r["baseline_solved"]} | {r["gain_pp"]:.1f} |\n' for r in cohorts)
+    if frozen.get('audit_status') == 'pending':
+        report += '\n**Exploratory; dataset audit pending.** Parse failures count as unsuccessful screening responses; bucket labels do not establish verified mathematical difficulty. Screening used temperature 0.6; the fresh baseline uses temperature 0. Archived AMC used a different quantized checkpoint, so cross-dataset differences do not isolate difficulty.\n'
+        write_csv(output/'baseline_screening_comparison.csv',[dict(question_id=q['question_id'],screening_correct=q['screening']['correct'],screening_responses=32,screening_solve_rate=q['screening']['solve_rate'],screening_greedy_correct=q['screening']['greedy_correct'],fresh_baseline_correct=results[q['question_id'],'baseline']['correct']) for q in frozen['questions']])
+    else:
+        report += '\nHistorical screening settings and raw response evidence were unavailable; historical low rates cannot be separated from grading differences.\n'
     report += '\nReference concerns were frozen before inference; supplied labels remain unchanged. See private reference_preflight.json and manifest.json. Proof validity is not graded.\n\n'
     report += '[Baseline table](../table1_baseline.md) · [Portfolio table](../table2_portfolio.md) · [Costs and failures](condition_diagnostics.csv)\n\n'
-    report += 'Reproduce: `bash scripts/run_deepmath.sh analyze`. Private questions, solutions and traces stay on scratch; publishing them requires separate authorization.\n'
+    wrapper = 'run_screened21.sh' if frozen.get('audit_status') == 'pending' else 'run_deepmath.sh'
+    report += f'Reproduce: `bash scripts/{wrapper} analyze`. Private questions, solutions and traces stay on scratch; publishing them requires separate authorization.\n'
     (output/'RESULTS_REPORT.md').write_text(report)
     return stats
 
@@ -175,7 +186,9 @@ def plot_archive(root, output):
         rows = sorted((r for r in summaries if r['dataset']==name), key=lambda r:r['k'])
         if [r['k'] for r in rows] != [1,2,3,4]: raise ValueError('Expected k=1..4 per dataset')
         coverage.append({'dataset':name,'N':rows[0]['N'],'baseline_pct':rows[0]['baseline_pct'],'summary':rows})
-    if [r['N'] for r in cohorts] != list(COUNTS): raise ValueError('Unexpected cohort sizes')
+    sizes = [r['N'] for r in cohorts]
+    if len(sizes) != len(THRESHOLDS) or any(n <= 0 for n in sizes) or sizes != sorted(sizes, reverse=True):
+        raise ValueError('Unexpected cohort sizes')
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
     render_coverage(output, coverage, cohorts)
@@ -186,12 +199,13 @@ def main():
     p.add_argument('action',choices=['pilot','final','plot'])
     p.add_argument('--results-dir',type=Path,required=True)
     p.add_argument('--amc-results-dir',type=Path,default=Path('experiment_results/amc50_qwen38_autoround_int4'))
+    p.add_argument('--allow-provisional-screening',action='store_true')
     p.add_argument('--output-dir',type=Path,help='Required for plotting public aggregate CSVs')
     args = p.parse_args()
     if args.action == 'plot':
         if args.output_dir is None: p.error('plot requires --output-dir')
         plot_archive(args.results_dir,args.output_dir)
-    elif args.action == 'pilot': inspect_pilot(args.results_dir)
-    else: final_analysis(args.results_dir,args.amc_results_dir)
+    elif args.action == 'pilot': inspect_pilot(args.results_dir,args.allow_provisional_screening)
+    else: final_analysis(args.results_dir,args.amc_results_dir,args.allow_provisional_screening)
 
 if __name__ == '__main__': main()

@@ -96,7 +96,7 @@ def manifest(path):
 
 
 def preflight(frozen):
-    if frozen.get('dataset_format') == 'deepmath-screened-v2':
+    if frozen.get('dataset_format') in ('deepmath-screened-v2', 'deepmath-screened-provisional-v1'):
         from .screening import preflight_reference
         for q in frozen['questions']: preflight_reference(q['reference'])
         return {'status':'passed', 'items':len(frozen['questions'])}
@@ -139,9 +139,15 @@ def preflight(frozen):
             'reference_notes':{q['question_id']:q['reference_note'] for q in frozen['questions'] if q['reference_note']}}
 
 
-def load_frozen(path):
+def load_frozen(path, allow_provisional=False):
     path = require_scratch(path)
     saved = json.loads(path.read_text())
+    if saved.get('dataset_format') == 'deepmath-screened-provisional-v1':
+        if not allow_provisional:
+            raise ValueError('Provisional screening requires --allow-provisional-screening')
+        from .screened_experiment import validate_manifest
+        validate_manifest(saved)
+        return saved
     if saved.get('dataset_format') == 'deepmath-screened-v2':
         from .screening import digest, accepted, results, preflight_reference
         evidence_root = require_scratch(saved.get('screening_run',path.parent))
