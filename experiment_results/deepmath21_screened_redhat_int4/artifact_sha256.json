@@ -8,7 +8,7 @@
   "table2_portfolio.csv": "ce857244b4d2d9f6f5fdc33059316adcf558cde63e03cb173e0d3069ca19cbe1",
   "table2_portfolio.md": "e4a833ca57b9649cd588a88e7fcff22db3d1354b6fa86a9863df16dac3ff6e4e",
   "table2_portfolio.tex": "4a3a553f4586353dfbfe69340eec04d099ac7a14404190392dc7f16477893e4b",
-  "comparison/RESULTS_REPORT.md": "12487d719d9b5d649e031321d446a894303167cb1cb310c52d3d692493c170c9",
+  "comparison/RESULTS_REPORT.md": "35a2dca0da66e7ce4222e7794825ec9b8bdf51eb05797d2e5f5518c7b38384e2",
   "comparison/all_subset_coverage.csv": "36fc6ca569f4e7a20395db3f2d67af84791beacac78b8f24d8dbb70ba4e32356",
   "comparison/complementarity_by_k.csv": "913d0f1a1a2e176b2cb5c0720b7422ddb08e1019dab82f1a9e44d7e64671f2a4",
   "comparison/cohort_metrics.csv": "54274f4dc43283310e7505501083c6b2dc3c21a183a73d6a304e505f4e71e7e7",
@@ -23,5 +23,6 @@
   "comparison/figure1_complementarity.svg": "63195fda218bc5f32aa5f2916b91900087cc79491175bd437e7f4d9286a01eb1",
   "comparison/figure2_harder_cohorts.png": "0f3f42b5a076d9bccb2acbb9b626c5db608b00f64ae9ea013314f67b62a4ad46",
   "comparison/figure2_harder_cohorts.pdf": "d4833e2fd86ea7eafde1b9ed71ea82caac18151acd0af4aea8ea02fc21481032",
-  "comparison/figure2_harder_cohorts.svg": "c0b70ec36d294e7901e71f674e0d6ed21ef8419c9ded943a1b870bcb6683f6ba"
+  "comparison/figure2_harder_cohorts.svg": "c0b70ec36d294e7901e71f674e0d6ed21ef8419c9ded943a1b870bcb6683f6ba",
+  "comparison/independent_bucket_metrics.csv": "f3e2c221afc81a2af15982047f239f9760475bdd5fb59fbd5521a575dad9fa3d"
 }

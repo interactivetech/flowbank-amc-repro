@@ -1,0 +1,6 @@
+screening_bucket,N,baseline_solved,baseline_accuracy_pct,oracle_solved,oracle_accuracy_pct
+0/32,5,0,0.0,0,0.0
+1-8/32,3,1,33.333333333333336,3,100.0
+9-16/32,4,0,0.0,4,100.0
+17-24/32,4,4,100.0,4,100.0
+25-32/32,5,5,100.0,5,100.0
