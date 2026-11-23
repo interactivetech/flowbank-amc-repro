@@ -1,8 +1,8 @@
 # FlowBank experiments: workflow complementarity, difficulty, and compute
 
-This document is the central record of the experiments so far and the next experiment to run. It links to the original specifications, deployment notes, and result archives so each section can be expanded as the study develops.
+This document is the central record of the completed experiments and next research directions. It links to the original specifications, deployment notes, and result archives so each section can be expanded as the study develops.
 
-**Current status:** AMC reproduction and the 21-question corrected-screening DeepMath evaluation are complete. The generated-token-budget DeepMath experiment is implemented and prepared for launch; its separate results are pending. The corrected DeepMath selection remains provisional pending manual audit.
+**Current status:** AMC reproduction, the 21-question corrected-screening DeepMath evaluation, and the generated-token-budget DeepMath experiment are complete. The budget-controlled run finished all 105 evaluations on November 23, 2026; baseline, best individual workflow, and portfolio oracle each solved 11/21 (52.4%). The corrected DeepMath selection remains provisional pending manual audit.
 
 ## Purpose
 
@@ -12,7 +12,7 @@ The study separates three questions:
 
 1. Can we reproduce the fixed FlowBank optimized workflow graphs and measure their accuracy under retrospective oracle selection?
 2. How does their complementary coverage change across questions with different observed screening solve rates?
-3. Does complementarity remain useful when baseline and workflows receive the same total compute allowance?
+3. Does complementarity remain useful when the baseline and full workflow portfolio receive the same maximum generated-token allowance?
 
 We evaluate existing fixed workflows, rather than rerunning workflow optimization. An oracle selector counts a question as solved when at least one workflow's final answer is correct. It uses ground truth retrospectively and is an upper bound, not a selector that can be deployed without knowing the answer.
 
@@ -28,9 +28,9 @@ All completed workflow comparisons use a fresh single-call baseline and the same
 | W3 | Diverse candidates, ensemble selection, and Python verification |
 | W4 | Question classification followed by a specialist solver |
 
-Shared evaluation settings are thinking enabled, temperature 0, top-p 1, inference seed 42, a 262,144-token context, and a **131,072 generated-token cap per call**, including reasoning. Two concurrent requests run on one B300. W2/W3 execute generated Python with resource limits. Only question text enters generation; reference answers and screening outcomes are used retrospectively.
+Shared evaluation settings are thinking enabled, temperature 0, top-p 1, inference seed 42, and a 262,144-token context. The original comparisons use a **131,072 generated-token cap per call**, including reasoning; the budget-controlled experiment uses the per-question and stage limits described below. Two concurrent requests run on one B300. W2/W3 execute generated Python with resource limits. Only question text enters generation; reference answers and screening outcomes are used retrospectively.
 
-The cap is per call, not per question or portfolio. Workflows therefore have different total allowances. Report accuracy alongside input/output token usage, latency, parse failures, truncations, and operational failures. Keep oracle coverage separate from an individual workflow's selected-answer accuracy.
+In the original comparisons, the cap is per call, so workflows have different total allowances. The budget-controlled comparison instead matches the maximum generated-token allowance of the baseline and full portfolio. Report accuracy alongside input/output token usage, latency, parse failures, truncations, and operational failures. Keep oracle coverage separate from an individual workflow's selected-answer accuracy.
 
 Details: [AMC specification](AMC_EXPERIMENT_PLAN.md), [implementation fidelity and limitations](REPRODUCTION_NOTES.md), and [corrected DeepMath run settings](RUN_SCREENED21.md).
 
@@ -41,7 +41,7 @@ The runs use pinned Qwen3.8-27B quantized checkpoints served locally with vLLM o
 | Experiments | Model repository | Pinned revision |
 |---|---|---|
 | AMC and historical 26-question DeepMath | `MIRALABS/Qwen3.8-27B-W4A16-AutoRound` | `a6754efcde1ea362616353759f0c97507775a5a9` |
-| Corrected screening and 21-question DeepMath | `RedHatAI/Qwen3.8-27B-INT4` | `e45c27e8f463817db788d141a73a3c235a0a7c0c` |
+| Corrected screening and both 21-question DeepMath evaluations | `RedHatAI/Qwen3.8-27B-INT4` | `e45c27e8f463817db788d141a73a3c235a0a7c0c` |
 
 The RedHatAI checkpoint declares INT4 weights and an FP8 KV-cache quantization scheme. Deployment identities, environment versions, and request settings are recorded with each experiment. Changing quantized checkpoints is a confound in cross-experiment comparisons; AMC versus corrected DeepMath does not isolate difficulty alone.
 
@@ -126,35 +126,40 @@ Details: [historical DeepMath plan](DEEPMATH_EXPERIMENT_PLAN.md), [historical 26
 
 ## Budget-constrained DeepMath experiment
 
-**Status: implemented; prepared for launch.** The authorized design gives the baseline 131,072 generated tokens and each complete workflow 32,768, controlling the full portfolio at the same maximum. Reasoning counts; input tokens do not. See the [committed specification and launch procedure](RUN_BUDGET21.md).
+**Status: complete — November 23, 2026, at 3:59 PM Eastern.** All 105 fresh evaluations and final analysis completed; results were archived and pushed in commit `d9de281` (implementation: `71927de`).
 
-**Purpose:** determine whether complementary workflows remain effective under a fixed total compute allowance, and where their coverage breaks down as questions become more difficult.
+**Purpose:** test whether the fixed portfolio retains its coverage advantage when its maximum generated-token allowance matches that of one direct baseline.
 
-The completed experiment does not answer this question because its limits apply per call. Measured mean input plus output usage was:
+The preceding corrected-screening run motivated this comparison: the full portfolio used about **12.37×** the baseline's measured input plus output tokens. Its mean tokens per question were 30,052 for baseline, 83,141 for W1, 135,851 for W2, 125,472 for W3, and 27,205 for W4. Those results did not control total allowances; see the [prior token-cost analysis](experiment_results/deepmath21_screened_redhat_int4/comparison/TOKEN_COST_COMPARISON.md).
 
-| Condition | Mean tokens/question | Relative to baseline | Accuracy |
-|---|---:|---:|---:|
-| Baseline | 30,052 | 1.00× | 47.6% |
-| W1 | 83,141 | 2.77× | 57.1% |
-| W2 | 135,851 | 4.52× | 47.6% |
-| W3 | 125,472 | 4.18× | 52.4% |
-| W4 | 27,205 | 0.91× | 57.1% |
+The new run reused the same 21-question snapshot and pinned RedHatAI checkpoint, with fresh responses for every condition. The direct baseline received at most **131,072 generated tokens per question**, while each complete workflow received **32,768**, giving the four-workflow portfolio the same maximum **131,072**. Reasoning, candidate generation, classification, selection, and code retries count toward durable per-evaluation wallets. Input tokens and Python executor compute are outside the controlled allowance. Fixed stage caps and unused allowance mean actual spending can differ.
 
-Running the whole portfolio used about **12.37×** the baseline's tokens. Token usage is a proxy for compute, not hardware FLOPs or monetary cost. W4's lower observed usage and higher accuracy is encouraging but is not yet a general efficiency result.
+| Condition | Generated-token allowance/question | Solved | Accuracy | Mean generated tokens/question |
+|---|---:|---:|---:|---:|
+| Baseline | 131,072 | 11/21 | 52.4% | 25,090 |
+| W1 | 32,768 | 6/21 | 28.6% | 22,912 |
+| W2 | 32,768 | 6/21 | 28.6% | 23,895 |
+| W3 | 32,768 | 6/21 | 28.6% | 24,234 |
+| W4 | 32,768 | 11/21 | 52.4% | 17,889 |
+| Oracle union of W1–W4 | 131,072 (portfolio) | 11/21 | 52.4% | 88,931 (portfolio) |
 
-The next experiment should freeze an audited selection and compare direct sampling, individual workflows, and portfolios at explicitly matched total budgets. Include candidate generation, classification, selection, verification, and retries in each method's budget. Compare oracle against oracle and actual selected answers against actual selected answers. Report cost and latency alongside accuracy by independent difficulty bucket.
+**Finding:** the portfolio has **zero aggregate accuracy gain** over the fresh baseline and **zero complementary coverage beyond W4**. Equal solved counts do not mean identical solved questions: W4 solves four baseline misses, while baseline solves four portfolio misses. The earlier portfolio's 76.2% coverage falls to 52.4% under this fixed allocation; the comparison is descriptive because stage caps changed and all responses were generated afresh.
 
-The budget unit, budget levels, stage allocations, repeated-sampling baseline, answer selector, and repeated-run protocol must be specified before inference. Equal per-call caps are insufficient. For example, 32K per call across four calls fits a 128K generation allowance, but does not equalize prompt-processing or executor costs.
+Independent, non-overlapping screening buckets show the coverage pattern:
 
-**Authorized run record:**
+| Screening correct / 32 | Questions | Baseline solved | Oracle solved | Oracle accuracy |
+|---|---:|---:|---:|---:|
+| 0 | 5 | 0/5 | 0/5 | 0% |
+| 1–8 | 3 | 1/3 | 3/3 | 100% |
+| 9–16 | 4 | 1/4 | 2/4 | 50% |
+| 17–24 | 4 | 4/4 | 2/4 | 50% |
+| 25–32 | 5 | 5/5 | 4/5 | 80% |
 
-- Dataset: the same 21-question snapshot at revision `5ad55d34498601997f551d5080301648e26e9db6`; audit pending.
-- Budget: generated tokens including reasoning; 131,072 baseline versus 32,768 per workflow, enforced by durable per-evaluation wallets.
-- Conditions: fresh direct baseline and fixed W1–W4; retrospective oracle. Repeated direct sampling and a deployable answer selector remain future controls.
-- Protocol: one fresh evaluation per question/condition, seed 42; five-question pilot with operational and budget-compliance gates, then automatic continuation.
-- Implementation commit and launch identity: recorded by the pipeline before inference. Results will be archived separately after all 105 evaluations.
+Budget compliance checks cover all 105 evaluations and report **zero violations**, with 2,394,442 generated tokens across all conditions. Outcomes include **42 final parsing failures** and **7 budget-exhausted evaluations** (three W2, four W3). There were 175 truncated calls, including 165 in W1–W3. These diagnostics limit interpretation: fixed stage caps can interrupt intermediate reasoning and selection, so this run does not establish that workflow structure itself lacks value.
 
-Prior evidence and motivation: [measured token-cost comparison and critiques](experiment_results/deepmath21_screened_redhat_int4/comparison/TOKEN_COST_COMPARISON.md). The [dedicated specification](RUN_BUDGET21.md) freezes the implementation; a results report will be linked after completion.
+The pilot passed operational and budget checks before continuing to the full run. Dataset revision remains `5ad55d34498601997f551d5080301648e26e9db6`; manual audit is pending. This small, adaptively selected sample controls maximum generated-token allowances, not equal actual spending, total tokens, wall time, or FLOPs. The oracle remains retrospective; repeated direct sampling and a deployable answer selector are future controls.
+
+Details: [frozen budget specification and commands](RUN_BUDGET21.md), [completed results report](experiment_results/deepmath21_budget128k_redhat_int4/comparison/RESULTS_REPORT.md), [budget compliance](experiment_results/deepmath21_budget128k_redhat_int4/budget_compliance.json), [measured token costs](experiment_results/deepmath21_budget128k_redhat_int4/comparison/generated_budget_costs.csv), and [provenance](experiment_results/deepmath21_budget128k_redhat_int4/provenance.json).
 
 ## Insights: difficulty-aware workflow optimization
 
@@ -163,9 +168,9 @@ Prior evidence and motivation: [measured token-cost comparison and critiques](ex
 The completed experiments motivate this direction:
 
 - On AMC, the full oracle adds nothing beyond the best individual workflow, suggesting limited value from additional portfolio members on this sample.
-- On corrected DeepMath, complementarity recovers questions missed by individual workflows in low/intermediate screening buckets, while the selected 0/32 group defeats the entire fixed portfolio.
-- More workflow calls do not guarantee useful diversity. W1 plus W4 matches the full portfolio's coverage here, and W4 uses fewer mean tokens than baseline.
-- The current results cannot separate benefits of workflow structure from unequal compute. The fixed-budget experiment is needed to test that distinction.
+- On corrected DeepMath with the original per-call caps, complementarity recovers questions missed by individual workflows in low/intermediate screening buckets. The selected 0/32 group defeats the entire fixed portfolio in both DeepMath runs.
+- More workflow calls do not guarantee useful diversity. W1 plus W4 matches the original DeepMath portfolio's coverage; under the controlled generated-token allowance, W4 alone matches the full portfolio and uses fewer mean generated tokens than baseline.
+- Matching maximum generated-token allowances removes the original aggregate accuracy advantage in this sample. Frequent parsing failures and truncations show that budget allocation within the workflows matters; input and executor costs remain uncontrolled, and repeated direct-sampling controls are still needed.
 
 A difficulty-aware optimizer could learn when a direct or specialist solver is sufficient, when diverse attempts or verification justify their cost, and when a different strategy or abstention is warranted. Any deployed difficulty estimate must be available before the answer is known; screening labels and oracle correctness cannot serve as a deployable router.
 
