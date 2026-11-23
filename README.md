@@ -2,6 +2,8 @@
 
 > **Screening audit notice (2026-11-18):** Historical screening rates have a confirmed Boolean grading defect and do not validate difficulty strata. Counts and figures are retained as recorded. See [the postmortem](DEEPMATH_SCREENING_POSTMORTEM.md) for evidence, limits, and the replacement screening process.
 
+Start with the [experiment overview](EXPERIMENT_OVERVIEW.md) for the study purpose, settings, deployment, screening, completed results, and proposed fixed-budget follow-up.
+
 Evaluate a frozen 50-item AMC subset with **Qwen3.8-27B AutoRound INT4**: one single-model rollout and the fixed Appendix D.1 workflows W1–W4. Compare final correctness and token costs, baseline-relative wins, and retrospective oracle union coverage.
 
 For a **10-hour B300 scavenger allocation**, use [B300_SCAVENGER.md](B300_SCAVENGER.md).
