@@ -72,18 +72,20 @@ def test_operational_gates_ignore_accuracy_and_observed_parse_failures():
 
 
 @pytest.mark.asyncio
-async def test_provisional_pilot_resume_full_and_final(provisional,monkeypatch):
+@pytest.mark.parametrize("budgeted",[False,True])
+async def test_provisional_pilot_resume_full_and_final(provisional,monkeypatch,budgeted):
     source,manifest=provisional;root=source.parent/'results';calls=[]
     class FakeClient:
         def __init__(self,settings):self.model='synthetic';self.api=SimpleNamespace(close=AsyncMock())
         async def discover(self):pass
         def parameters(self):return {'temperature':0,'top_p':1,'seed':42,'max_tokens':131072}
         def metadata(self):return {'model':self.model,'request_parameters':self.parameters()}
-        async def call(self,prompt,stage,operator,trace):
+        async def call(self,prompt,stage,operator,trace,**limits):
             assert 'screening_solve_rate' not in prompt and 'gold_answer' not in prompt
             calls.append(stage)
-            trace.emit(event='llm_call',stage_id=stage,status='success',latency=1,usage={'prompt_tokens':10,'completion_tokens':20})
-            return '<solution_letter>A</solution_letter>' if operator=='ScEnsemble' else 'def solve():\n    return 42' if operator=='Programmer' else 'ALGEBRA' if stage=='classify' else '42'
+            output = '<solution_letter>A</solution_letter>' if operator=='ScEnsemble' else 'def solve():\n    return 42' if operator=='Programmer' else 'ALGEBRA' if stage=='classify' else '42'
+            trace.emit(event='llm_call',stage_id=stage,status='success',output=output,latency=1,usage={'prompt_tokens':10,'completion_tokens':20})
+            return output
     async def execute(code):return {'status':'Success','output':'42'}
     original=run.Workflow
     monkeypatch.setattr(run,'Workflow',lambda c,t:original(c,t,execute))
@@ -95,6 +97,7 @@ async def test_provisional_pilot_resume_full_and_final(provisional,monkeypatch):
     base=['--dataset-format','deepmath-screened','--dataset',str(source/'manifest.json'),'--results-dir',str(root),'--local-runtime']
     with pytest.raises(ValueError,match='requires --allow-provisional'):await run.main(run.parser().parse_args(base))
     base+=['--allow-provisional-screening']
+    if budgeted:base+=['--generated-budget-profile','portfolio-128k-generated-v1']
     await run.main(run.parser().parse_args(base+['--limit-items','5']))
     assert len(calls)==85
     inspection=inspect_pilot(root,True)
@@ -120,9 +123,14 @@ async def test_provisional_pilot_resume_full_and_final(provisional,monkeypatch):
     import csv
     with (root/'comparison/cohort_metrics.csv').open() as f:assert [int(r['N']) for r in csv.DictReader(f)]==[21,16,12,8,5]
     assert (root/'comparison/baseline_screening_comparison.csv').exists()
+    if budgeted:
+        assert json.loads((root/'budget_compliance.json').read_text())['violations']==0
+        assert (root/'comparison/generated_budget_costs.csv').exists()
+        assert (root/'comparison/independent_bucket_metrics.csv').exists()
     # Exercise the archive allowlist without changing Git or contacting a remote.
     from amc_repro import screened_pipeline as pipeline
     monkeypatch.setattr(pipeline,'RESULTS',root)
+    monkeypatch.setattr(pipeline,'BUDGET_CONTROLLED',budgeted)
     monkeypatch.setattr(pipeline,'REPO',source.parent)
     monkeypatch.setattr(pipeline,'gate',lambda:'source-sha')
     def fake_git(*args):

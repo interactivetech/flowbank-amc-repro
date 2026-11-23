@@ -41,3 +41,21 @@ def test_deepseek_thinking_parameter(monkeypatch):
     c=Client(Settings(thinking='off'))
     c.model='deepseek-v4-flash'
     assert c.parameters()['extra_body']=={'thinking':{'type':'disabled'}}
+
+
+@pytest.mark.asyncio
+async def test_per_call_cap_isolated_and_used_for_context_check(monkeypatch,tmp_path):
+    from types import SimpleNamespace
+    monkeypatch.setenv('OPENAI_BASE_URL','http://localhost:8000/v1')
+    monkeypatch.setenv('OPENAI_API_KEY','mock-key')
+    c=Client(Settings(max_tokens=10,requests_per_minute=100000));c.model='mock'
+    c.tokenizer=SimpleNamespace(apply_chat_template=lambda *a,**kw:[1,2,3]);c.context_length=6
+    sent=[]
+    async def create(**kwargs):
+        sent.append(kwargs)
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content='42'))],
+            model_dump=lambda **kw:dict(choices=[dict(message=dict(content='42'),finish_reason='stop')],usage=dict(prompt_tokens=3,completion_tokens=3)))
+    monkeypatch.setattr(c.api.chat.completions,'create',create)
+    assert await c.call('p','s','Custom',Trace(tmp_path/'trace',{}),max_tokens=3,retries=0)=='42'
+    assert sent[0]['max_tokens']==3 and c.settings.max_tokens==10
+    await c.api.close()

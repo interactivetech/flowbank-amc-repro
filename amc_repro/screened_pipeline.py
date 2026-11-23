@@ -19,6 +19,8 @@ ROOT = Path(os.environ.get('AMC_ROOT','/scratch1/mendeza/flowbank-amc'))
 RESULTS = ROOT/'results/deepmath21_screened_redhat_int4'
 ARCHIVE = Path('experiment_results/deepmath21_screened_redhat_int4')
 child = None
+WRAPPER = 'scripts/run_screened21.sh'
+BUDGET_CONTROLLED = False
 
 
 def git(*args):
@@ -52,7 +54,7 @@ def command(*args):
 
 
 def action(name):
-    command('bash','scripts/run_screened21.sh',name)
+    command('bash',WRAPPER,name)
 
 
 def interrupt(signum, frame):
@@ -85,6 +87,8 @@ def archive(source_commit):
         'RESULTS_REPORT.md','all_subset_coverage.csv','complementarity_by_k.csv','cohort_metrics.csv',
         'cohort_membership.csv','per_item_correctness.csv','evaluation_costs.csv','condition_diagnostics.csv',
         'baseline_screening_comparison.csv','plot_environment.json')]
+    if BUDGET_CONTROLLED:
+        names += ['budget_compliance.json','comparison/generated_budget_costs.csv','comparison/independent_bucket_metrics.csv']
     names += [f'comparison/{name}.{ext}' for name in ('figure1_complementarity','figure2_harder_cohorts') for ext in ('png','pdf','svg')]
     for name in names:
         path=target/name
@@ -98,25 +102,37 @@ def archive(source_commit):
         model_repository=config['local_runtime']['model']['repository'],
         model_revision=config['local_runtime']['model']['revision'],source_hashes=config['source_hashes'],
         settings=config['settings'],runtime_packages=config['runtime_packages'],audit_status='pending',
-        sample_size=21,expected_evaluations=105))
+        sample_size=21,expected_evaluations=105,generated_token_policy=config.get('generated_token_policy')))
     atomic_json(target/'artifact_sha256.json',{name:hashlib.sha256((target/name).read_bytes()).hexdigest() for name in names})
-    (target/'README.md').write_text('# Screened DeepMath: 21-question FlowBank rerun\n\n'
+    title = 'Budget-controlled screened DeepMath' if BUDGET_CONTROLLED else 'Screened DeepMath: 21-question FlowBank rerun'
+    (target/'README.md').write_text(f'# {title}\n\n'
         '**Exploratory; dataset audit pending.** Fresh baseline and fixed W1–W4, 105 evaluations.\n\n'
         '[Results report](comparison/RESULTS_REPORT.md) · [Baseline table](table1_baseline.md) · '
         '[Portfolio table](table2_portfolio.md) · [Provenance](provenance.json)\n\n'
-        'Reproduce with `bash scripts/run_screened21.sh analyze`. Private questions and raw traces remain on scratch.\n')
+        f'Reproduce with `bash {WRAPPER} analyze`. Private questions and raw traces remain on scratch.\n')
     git('add','--',str(ARCHIVE))
     staged=git('diff','--cached','--name-only').splitlines()
     if not staged or any(not p.startswith(str(ARCHIVE)+'/') for p in staged):
         raise ValueError('Unexpected staged files')
     git('diff','--cached','--check')
-    git('commit','-m','Archive exploratory screened-21 FlowBank results and complementarity figures')
+    git('commit','-m',('Archive budget-controlled DeepMath results and compliance' if BUDGET_CONTROLLED else 'Archive exploratory screened-21 FlowBank results and complementarity figures'))
     commit=git('rev-parse','HEAD')
     git('push','origin',f'HEAD:refs/heads/{BRANCH}')
     return commit
 
 
 def main():
+    global RESULTS, ARCHIVE, BRANCH, WRAPPER, BUDGET_CONTROLLED
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--budget-controlled',action='store_true')
+    args=parser.parse_args()
+    if args.budget_controlled:
+        BUDGET_CONTROLLED=True
+        RESULTS=ROOT/'results/deepmath21_budget128k_redhat_int4'
+        ARCHIVE=Path('experiment_results/deepmath21_budget128k_redhat_int4')
+        BRANCH='budget128k-deepmath'
+        WRAPPER='scripts/run_budget21.sh'
     os.environ['AMC_MODEL_PROFILE']='redhat'
     if not os.environ.get('SLURM_JOB_ID'): raise ValueError('Run inside a GPU Slurm allocation')
     RESULTS.mkdir(parents=True,exist_ok=True)

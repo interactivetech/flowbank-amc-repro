@@ -68,17 +68,22 @@ class Client:
         return {'base_url': str(self.api.base_url), 'model': self.model, 'request_parameters': self.parameters(),
                 'client_settings': asdict(self.settings), 'models_response': self.models}
 
-    async def call(self, prompt, stage, operator, trace):
+    async def call(self, prompt, stage, operator, trace, *, max_tokens=None, retries=None):
         params = self.parameters()
+        if max_tokens is not None:
+            if not 1 <= max_tokens <= self.settings.max_tokens:
+                raise ValueError('Invalid per-call output allowance')
+            params['max_tokens'] = max_tokens
         if self.tokenizer is not None:
             count = len(self.tokenizer.apply_chat_template(
                 [{'role':'user','content':prompt}], tokenize=True, add_generation_prompt=True,
                 enable_thinking=self.settings.thinking != 'off'))
-            if count + self.settings.max_tokens > self.context_length:
+            if count + params['max_tokens'] > self.context_length:
                 trace.emit(event='context_overflow', stage_id=stage, prompt_tokens=count,
-                           output_allowance=self.settings.max_tokens, context_length=self.context_length)
-                raise ValueError(f'Context overflow: {count} prompt + {self.settings.max_tokens} output > {self.context_length}')
-        for attempt in range(self.settings.retries + 1):
+                           output_allowance=params['max_tokens'], context_length=self.context_length)
+                raise ValueError(f"Context overflow: {count} prompt + {params['max_tokens']} output > {self.context_length}")
+        retry_limit = self.settings.retries if retries is None else retries
+        for attempt in range(retry_limit + 1):
             start = time.monotonic()
             try:
                 async with self.sem:
@@ -98,6 +103,6 @@ class Client:
                 trace.emit(event='llm_call', stage_id=stage, operator_type=operator, attempt=attempt,
                            parameters=params, input=prompt, output=None, status='error', error=str(exc),
                            latency=time.monotonic()-start)
-                if status in (401,403) or (status and status < 500 and status != 429) or attempt == self.settings.retries:
+                if status in (401,403) or (status and status < 500 and status != 429) or attempt == retry_limit:
                     raise
                 await asyncio.sleep(min(30, 2 ** attempt))

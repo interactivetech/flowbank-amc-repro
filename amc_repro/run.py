@@ -41,6 +41,8 @@ def parser():
     p.add_argument('--resume',action='store_true')
     p.add_argument('--allow-provisional-screening',action='store_true',
                    help='Explicitly allow an exploratory run on a frozen, unaudited screening snapshot')
+    p.add_argument('--generated-budget-profile',choices=['portfolio-128k-generated-v1'],
+                   help='Baseline 128K; each full workflow 32K generated tokens, including reasoning')
     p.add_argument('--limit-items',type=int, help='Schedule only the first K items of the full frozen manifest')
     p.add_argument('--model-lock',type=Path,help='Explicit pinned model lock for a separately versioned DeepMath rerun')
     p.add_argument('--local-runtime',action='store_true', help='Bind the pinned local server identity and tokenizer')
@@ -62,6 +64,8 @@ async def _main(args):
     if len(set(workflows)) != len(workflows) or set(workflows)-set(['baseline','W1','W2','W3','W4']):
         raise ValueError('Invalid or duplicate workflows')
     if args.concurrency < 1 or args.requests_per_minute <= 0: raise ValueError('Invalid concurrency/rate')
+    if args.generated_budget_profile and args.dataset_format != 'deepmath-screened':
+        raise ValueError('This budget profile is frozen for screened DeepMath')
     size = args.sample_size if args.sample_size is not None else (26 if args.dataset_format == 'deepmath-screened' else 50)
     if args.limit_items is not None and not 1 <= args.limit_items <= size:
         raise ValueError('limit-items must be between 1 and sample-size')
@@ -111,6 +115,9 @@ async def _main(args):
     if args.allow_provisional_screening:
         config['allow_provisional_screening'] = True
         config['audit_status'] = manifest.get('audit_status', 'not_applicable')
+    if args.generated_budget_profile:
+        from .token_budget import POLICY
+        config['generated_token_policy'] = POLICY
     if (root/'config.json').exists():
         if not args.resume: raise ValueError('Results exist; use --resume or a fresh results directory')
         if json.loads((root/'manifest.json').read_text()) != manifest: raise ValueError('Saved manifest mismatch')
@@ -144,7 +151,10 @@ async def _main(args):
                 if completed.exists(): return
                 trace = Trace(folder/'trace.jsonl', {'question_id':q['question_id'],'workflow_id':w,'model':client.model,
                                                     'inference_parameters':client.parameters()})
-                flow = Workflow(CachedClient(client,folder/'calls'),trace)
+                from .token_budget import BudgetedCachedClient, BudgetExhausted
+                cached = (BudgetedCachedClient(client,folder/'budget_calls',w) if args.generated_budget_profile
+                          else CachedClient(client,folder/'calls'))
+                flow = Workflow(cached,trace)
                 start = time.monotonic()
                 try:
                     problem = q['row']['question'] if args.dataset_format == 'deepmath-screened' else q['row']['problem']
@@ -152,6 +162,8 @@ async def _main(args):
                     grading = grade_typed(output,q['reference']) if 'reference' in q else grade(output,q['gold_answer'])
                     status = 'completed'
                     error = None
+                except BudgetExhausted as exc:
+                    output, grading, status, error = '', {'correct':False,'grading_status':'budget_exhausted','extracted_answer':None}, 'completed', str(exc)
                 except WorkflowOutputError as exc:
                     output, grading, status, error = '', {'correct':False,'grading_status':'parse_failure','extracted_answer':None}, 'completed', str(exc)
                 except Exception as exc:
@@ -175,6 +187,8 @@ async def _main(args):
                               prompt_tokens=sum(u['prompt_tokens'] for u in usages), completion_tokens=sum(u['completion_tokens'] for u in usages),
                               usage_complete=bool(calls) and len(usages)==len(calls),
                               truncated_calls=sum(e.get('finish_reason') == 'length' for e in calls))
+                if args.generated_budget_profile and status == 'completed':
+                    result.update(cached.accounting())
                 trace.emit(event='retrospective_evaluation',**result)
                 atomic_json(completed if status == 'completed' else folder/'failure.json',result)
                 if status == 'completed': (folder/'failure.json').unlink(missing_ok=True)

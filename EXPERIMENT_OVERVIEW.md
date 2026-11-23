@@ -2,7 +2,7 @@
 
 This document is the central record of the experiments so far and the next experiment to run. It links to the original specifications, deployment notes, and result archives so each section can be expanded as the study develops.
 
-**Current status:** AMC reproduction and the 21-question corrected-screening DeepMath evaluation are complete. The fixed-budget DeepMath experiment is proposed and has not been implemented or launched. The corrected DeepMath selection remains provisional pending manual audit.
+**Current status:** AMC reproduction and the 21-question corrected-screening DeepMath evaluation are complete. The generated-token-budget DeepMath experiment is implemented and prepared for launch; its separate results are pending. The corrected DeepMath selection remains provisional pending manual audit.
 
 ## Purpose
 
@@ -126,7 +126,7 @@ Details: [historical DeepMath plan](DEEPMATH_EXPERIMENT_PLAN.md), [historical 26
 
 ## Budget-constrained DeepMath experiment
 
-**Status: proposed; not yet implemented or launched.**
+**Status: implemented; prepared for launch.** The authorized design gives the baseline 131,072 generated tokens and each complete workflow 32,768, controlling the full portfolio at the same maximum. Reasoning counts; input tokens do not. See the [committed specification and launch procedure](RUN_BUDGET21.md).
 
 **Purpose:** determine whether complementary workflows remain effective under a fixed total compute allowance, and where their coverage breaks down as questions become more difficult.
 
@@ -146,15 +146,15 @@ The next experiment should freeze an audited selection and compare direct sampli
 
 The budget unit, budget levels, stage allocations, repeated-sampling baseline, answer selector, and repeated-run protocol must be specified before inference. Equal per-call caps are insufficient. For example, 32K per call across four calls fits a 128K generation allowance, but does not equalize prompt-processing or executor costs.
 
-**Run record to complete before launch:**
+**Authorized run record:**
 
-- Frozen dataset revision and audit status: pending.
-- Budget definition, levels, and enforcement: pending.
-- Baselines, selectors, and workflow configurations: pending.
-- Seeds, repetitions, diagnostics, and acceptance checks: pending.
-- Implementation commit, launch record, and result report: pending.
+- Dataset: the same 21-question snapshot at revision `5ad55d34498601997f551d5080301648e26e9db6`; audit pending.
+- Budget: generated tokens including reasoning; 131,072 baseline versus 32,768 per workflow, enforced by durable per-evaluation wallets.
+- Conditions: fresh direct baseline and fixed W1–W4; retrospective oracle. Repeated direct sampling and a deployable answer selector remain future controls.
+- Protocol: one fresh evaluation per question/condition, seed 42; five-question pilot with operational and budget-compliance gates, then automatic continuation.
+- Implementation commit and launch identity: recorded by the pipeline before inference. Results will be archived separately after all 105 evaluations.
 
-Prior evidence and motivation: [measured token-cost comparison and critiques](experiment_results/deepmath21_screened_redhat_int4/comparison/TOKEN_COST_COMPARISON.md). A dedicated specification and results report will be linked here when available.
+Prior evidence and motivation: [measured token-cost comparison and critiques](experiment_results/deepmath21_screened_redhat_int4/comparison/TOKEN_COST_COMPARISON.md). The [dedicated specification](RUN_BUDGET21.md) freezes the implementation; a results report will be linked after completion.
 
 ## Insights: difficulty-aware workflow optimization
 

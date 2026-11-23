@@ -59,6 +59,12 @@ def inspect_pilot(root, allow_provisional=False):
         'estimated_remaining_hours':latency/2*(remaining/expected)/3600 if complete and latency else None,
         'estimate_method':f'Summed pilot request latency / concurrency 2, scaled by {remaining}/{expected}; approximate, not an allocation guarantee. Harder questions and retries may take longer.',
         'failures':[{'question_id':r['question_id'],'workflow_id':r['workflow_id'],'error':r.get('error')} for r in records if r.get('error')]}
+    config = json.loads((root/'config.json').read_text())
+    if config.get('generated_token_policy'):
+        from .token_budget import compliance
+        completed_records = [r for r in records if r['status']=='completed']
+        report['budget_compliance'] = compliance(completed_records)
+        atomic_json(root/'pilot_budget_compliance.json',report['budget_compliance'])
     atomic_json(root/'pilot_inspection.json',report)
     if complete: analyze(root,5)
     print(json.dumps(report,indent=2))
@@ -165,6 +171,10 @@ def final_analysis(root, amc_root, allow_provisional=False):
     wrapper = 'run_screened21.sh' if frozen.get('audit_status') == 'pending' else 'run_deepmath.sh'
     report += f'Reproduce: `bash scripts/{wrapper} analyze`. Private questions, solutions and traces stay on scratch; publishing them requires separate authorization.\n'
     (output/'RESULTS_REPORT.md').write_text(report)
+    config = json.loads((root/'config.json').read_text())
+    if config.get('generated_token_policy'):
+        from .token_budget import report as budget_report
+        budget_report(root,frozen,records)
     return stats
 
 

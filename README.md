@@ -23,3 +23,5 @@ DeepMath completed results: [26-item report, tables, and figures](experiment_res
 A separate [RedHatAI checkpoint rerun](REDHAT_DEEPMATH_RERUN.md) was authorized on November 18 to investigate the screening discrepancy; it preserves the original AutoRound results.
 
 The [21-question screened FlowBank rerun](RUN_SCREENED21.md) uses the corrected provisional dataset with fresh baseline/W1–W4 evaluations, automatic pilot checks, and a separate results archive. Dataset audit remains pending.
+
+The [generated-token-budget DeepMath experiment](RUN_BUDGET21.md) compares a 128K direct baseline with a 128K four-workflow portfolio (32K per complete workflow).

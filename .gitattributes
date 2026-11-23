@@ -4,3 +4,6 @@ experiment_results/deepmath26_qwen38_autoround_int4/*.svg -whitespace
 experiment_results/deepmath21_screened_redhat_int4/*.csv whitespace=cr-at-eol
 experiment_results/deepmath21_screened_redhat_int4/comparison/*.csv whitespace=cr-at-eol
 experiment_results/deepmath21_screened_redhat_int4/comparison/*.svg -whitespace
+experiment_results/deepmath21_budget128k_redhat_int4/*.csv whitespace=cr-at-eol
+experiment_results/deepmath21_budget128k_redhat_int4/comparison/*.csv whitespace=cr-at-eol
+experiment_results/deepmath21_budget128k_redhat_int4/comparison/*.svg -whitespace
