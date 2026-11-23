@@ -1,0 +1,11 @@
+{
+  "profile": "portfolio-128k-generated-v1",
+  "evaluations": 105,
+  "questions": 21,
+  "violations": 0,
+  "baseline_allowance": 131072,
+  "workflow_allowance": 32768,
+  "portfolio_allowance": 131072,
+  "generated_tokens": 2394442,
+  "budget_exhausted_evaluations": 7
+}

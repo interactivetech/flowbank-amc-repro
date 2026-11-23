@@ -1,0 +1,6 @@
+max_screening_rate,N,oracle_solved,best_workflow,best_individual_solved,baseline_solved,oracle_pct,best_individual_pct,baseline_pct,gain_pp,W1_solved,W2_solved,W3_solved,W4_solved
+1,21,11,W4,11,11,52.38095238095238,52.38095238095238,52.38095238095238,0.0,6,6,6,11
+0.75,16,7,W4,7,6,43.75,43.75,37.5,0.0,2,2,2,7
+0.5,12,5,W4,5,2,41.666666666666664,41.666666666666664,16.666666666666668,0.0,1,1,2,5
+0.25,8,3,W4,3,1,37.5,37.5,12.5,0.0,0,1,2,3
+0,5,0,W1,0,0,0.0,0.0,0.0,0.0,0,0,0,0
