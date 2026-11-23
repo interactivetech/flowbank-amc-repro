@@ -24,5 +24,6 @@
   "comparison/figure2_harder_cohorts.png": "0f3f42b5a076d9bccb2acbb9b626c5db608b00f64ae9ea013314f67b62a4ad46",
   "comparison/figure2_harder_cohorts.pdf": "d4833e2fd86ea7eafde1b9ed71ea82caac18151acd0af4aea8ea02fc21481032",
   "comparison/figure2_harder_cohorts.svg": "c0b70ec36d294e7901e71f674e0d6ed21ef8419c9ded943a1b870bcb6683f6ba",
-  "comparison/independent_bucket_metrics.csv": "f3e2c221afc81a2af15982047f239f9760475bdd5fb59fbd5521a575dad9fa3d"
+  "comparison/independent_bucket_metrics.csv": "f3e2c221afc81a2af15982047f239f9760475bdd5fb59fbd5521a575dad9fa3d",
+  "comparison/TOKEN_COST_COMPARISON.md": "a7ecd95e044932c4ecffd9f2da0bb20420c738d5b964a571b73290ac49237a0b"
 }
